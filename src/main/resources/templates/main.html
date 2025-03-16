@@ -47,9 +47,10 @@
                 <div class="col">
                     <div class="row row-cols-1 d-flex">
                         <div class="col py-2 border-bottom border-2 text-center" th:text="${#temporals.format(post.createdAt, 'd MMM yyyy, HH:MM')}"></div>
-                        <div class="col mt-1 mb-2" th:text="${post.text}"></div>
-                        <div class="col text-center p-0 border-top border-2 post___image" th:if="${post.imageUrl != null}">
-                            <img class="rounded-bottom-4 img-fluid" th:src="@{${post.imageUrl}}" alt="Image">
+                        <div class="col mt-1 mb-2" th:text="${post.text}" th:if="${post.text != null}"></div>
+
+                        <div class="col text-center p-0 border-top border-2 post___image" th:if="${post.image != null}">
+                            <img class="rounded-bottom-4 img-fluid" th:src="@{${post.image}}" alt="Image">
                         </div>
                     </div>
                 </div>
