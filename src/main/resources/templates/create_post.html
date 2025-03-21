@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create a post</title>
+    <link th:replace="~{fragments/bootstrap :: css}"></link>
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <form action="#" th:action="@{/posts/create}" th:object="${post}" method="post"
+                          enctype="multipart/form-data" autocomplete="off">
+                        <div class="mb-3">
+                            <label for="text" class="form-label">Text</label>
+                            <input type="text" class="form-control" id="text" th:field="*{text}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="image_file" class="form-label">Image</label>
+                            <input type="file" class="form-control" id="image_file">
+                        </div>
+                        <div class="mb-3">Or</div>
+                        <div class="mb-3">
+                            <label for="image_url" class="form-label">Image URL</label>
+                            <input type="text" class="form-control" id="image_url">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script th:replace="~{fragments/bootstrap :: js}"></script>
+</body>
+</html>
