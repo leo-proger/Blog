@@ -7,10 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -27,6 +24,11 @@ public class PostController {
         this.postService = postService;
     }
 
+    @GetMapping
+    public String all() {
+        return "redirect:/";
+    }
+
     @GetMapping("/create")
     public String createGet(Model model) {
         model.addAttribute("post", new PostDTO("", null, ""));
@@ -35,8 +37,7 @@ public class PostController {
 
     @PostMapping("/create")
     public String createPost(@Valid @ModelAttribute("post") PostDTO postDTO,
-                             BindingResult bindingResult,
-                             Model model) throws IOException {
+                             BindingResult bindingResult) throws IOException {
         String postText = postDTO.getText();
         String postImageUrl = postDTO.getImageUrl();
         MultipartFile postImageFile = postDTO.getImageFile();
@@ -87,6 +88,12 @@ public class PostController {
         }
 
         postService.save(post);
+        return "redirect:/";
+    }
+
+    @PostMapping("/{id}")
+    public String deletePost(@PathVariable Long id) {
+        postService.deleteById(id);
         return "redirect:/";
     }
 }

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Base64;
 
 @Data
@@ -27,18 +26,16 @@ public class Post {
     }
 
     public void setImageUrl(String img) {
-        if (img != null && !img.isEmpty()) {
-            image = img;
-            return;
+        if (img == null || img.isEmpty()) {
+            throw new IllegalArgumentException("Image URL can't be empty");
         }
-        throw new IllegalArgumentException("Image URL can't be empty");
+        image = img;
     }
 
     public void setImage(byte[] img, String filetype) {
-        if (img != null && img.length != 0) {
-            image = "data:" + filetype + ";base64," + Base64.getEncoder().encodeToString(img);
-            return;
+        if (img == null || img.length == 0) {
+            throw new IllegalArgumentException("Image file can't be empty");
         }
-        throw new IllegalArgumentException("Image file can't be empty");
+        image = "data:" + filetype + ";base64," + Base64.getEncoder().encodeToString(img);
     }
 }

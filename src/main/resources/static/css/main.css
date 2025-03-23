@@ -5,3 +5,15 @@
 .wall {
     max-width: 550px;
 }
+
+.delete_post_btn {
+    background: none;
+    border: none;
+    transition: color 0.15s ease, transform 0.15s ease;
+    transform-origin: center;
+}
+
+.delete_post_btn:hover {
+    color: #5d5d5d;
+    transform: scale(1.05);
+}

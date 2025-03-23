@@ -7,7 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Main Page</title>
 
-    <link th:replace="~{fragments/bootstrap :: css}">
+    <link th:replace="~{fragments/resources :: bootstrap_css}">
+    <link th:replace="~{fragments/resources :: fa}">
 
     <!-- My styles -->
     <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/main.css}">
@@ -16,17 +17,58 @@
     <div th:replace="~{fragments/header :: header}"></div>
 
     <main>
-        <div class="container-md wall">
-            <div class="row border border-2 rounded-4 mx-auto my-3" th:each="post : ${posts}">
+        <div class="wall container-md">
+            <div th:each="post : ${posts}" th:id="'post_id_' + ${post.id}"
+                 class="row border border-2 rounded-4 mx-auto my-3">
                 <div class="col">
-                    <div class="row row-cols-1 d-flex">
-                        <div class="col py-2 text-center"
-                             th:text="${#temporals.format(post.createdAt, 'd MMM yyyy, HH:mm')}"></div>
+                    <div class="row d-flex">
+                        <div class="col d-flex justify-content-start align-items-center">
+                            <span class="text-center"
+                                  th:text="${#temporals.format(post.createdAt, 'd MMM yyyy, HH:mm')}"></span>
+                        </div>
+                        <div class="col d-flex justify-content-end">
+                            <button type="button" class="delete_post_btn" data-bs-toggle="modal"
+                                    data-bs-target="#confirmDeleteModal"
+                                    th:data-post-id="${post.id}">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
 
-                        <div class="col border-top border-2 mt-1 mb-2" th:if="${post.text != '' && post.text != null}"
+                            <!-- Modal -->
+                            <div class="modal fade" id="confirmDeleteModal" tabindex="-1"
+                                 aria-labelledby="confirmDeleteModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="confirmDeleteModalLabel">Delete this
+                                                post?</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            This post will be deleted permanently, and you will not be able to restore
+                                            it
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Close
+                                            </button>
+                                            <button id="delete_post_final_btn" type="button"
+                                                    class="btn bg-danger text-white"
+                                                    data-bs-dismiss="modal">Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-12 border-top border-2 mt-1 mb-2"
+                             th:if="${post.text != '' && post.text != null}"
                              th:text="${post.text}"></div>
 
-                        <div class="col text-center p-0 border-top border-2 post___image" th:if="${post.image != null}">
+                        <div class="post_image col-12 text-center p-0 border-top border-2"
+                             th:if="${post.image != null}">
                             <img class="rounded-bottom-4 img-fluid" th:src="@{${post.image}}" alt="Image">
                         </div>
                     </div>
@@ -40,6 +82,7 @@
         </div>
     </main>
 
-    <script th:replace="~{fragments/bootstrap :: js}"></script>
+    <script th:replace="~{fragments/resources :: bootstrap_js}"></script>
+    <script src="/js/main.js"></script>
 </body>
 </html>
