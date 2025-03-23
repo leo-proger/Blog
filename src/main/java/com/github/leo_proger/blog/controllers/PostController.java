@@ -3,14 +3,20 @@ package com.github.leo_proger.blog.controllers;
 import com.github.leo_proger.blog.dto.PostDTO;
 import com.github.leo_proger.blog.models.Post;
 import com.github.leo_proger.blog.services.PostService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+
 
 @Controller
 @RequestMapping("/posts")
@@ -28,25 +34,58 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public String createPost(@ModelAttribute PostDTO postDTO) throws IOException {
-        if (postDTO.text() == null && postDTO.imageFile() == null && postDTO.imageUrl().isEmpty()) {
-            return "ERROR: At least one param must be not null";
+    public String createPost(@Valid @ModelAttribute("post") PostDTO postDTO,
+                             BindingResult bindingResult,
+                             Model model) throws IOException {
+        String postText = postDTO.getText();
+        String postImageUrl = postDTO.getImageUrl();
+        MultipartFile postImageFile = postDTO.getImageFile();
+
+        if ((postText == null || postText.isBlank())
+            && (postImageUrl == null || postImageUrl.isBlank())
+            && (postImageFile == null || postImageFile.isEmpty())) {
+            bindingResult.rejectValue("text", "error.text", "At least one param must be not null");
         }
-        if (postDTO.imageFile() != null && postDTO.imageUrl() != null) {
-            return "ERROR: You can add only one image";
+        if (postImageFile != null && !postImageFile.isEmpty()
+            && postImageUrl != null && !postImageUrl.isBlank()) {
+            bindingResult.rejectValue("imageUrl", "error.image", "You can add only one image");
         }
 
         Post post = new Post();
 
-        if (postDTO.text() != null) {
-            post.setText(postDTO.text());
+        if (postText != null && !postText.isBlank()) {
+            post.setText(postText);
         }
-        if (postDTO.imageUrl() != null) {
-            post.setImageUrl(postDTO.imageUrl());
+        if (postImageUrl != null && !postImageUrl.isBlank()) {
+            try {
+                URL url = new URL(postImageUrl);
+
+                URLConnection connection = url.openConnection();
+                connection.connect();
+
+                String contentType = connection.getContentType();
+
+                if (contentType != null && contentType.startsWith("image/")) {
+                    post.setImageUrl(postImageUrl);
+                } else {
+                    bindingResult.rejectValue("imageUrl", "error.image", "You can paste links only with images");
+                }
+            } catch (IOException e) {
+                bindingResult.rejectValue("imageUrl", "error.image", "Incorrect URL");
+            }
         }
-        if (postDTO.imageFile() != null) {
-            post.setImage(postDTO.imageFile().getBytes());
+        if (postImageFile != null && !postImageFile.isEmpty()) {
+            String filetype = postImageFile.getContentType();
+            if (filetype != null && filetype.startsWith("image/")) {
+                post.setImage(postImageFile.getBytes(), filetype);
+            } else {
+                bindingResult.rejectValue("imageFile", "error.image", "Incorrect filetype. You can upload only images");
+            }
         }
+        if (bindingResult.hasErrors()) {
+            return "create_post";
+        }
+
         postService.save(post);
         return "redirect:/";
     }

@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Main Page</title>
 
-    <link th:replace="~{fragments/bootstrap :: css}"></link>
+    <link th:replace="~{fragments/bootstrap :: css}">
 
     <!-- My styles -->
     <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/main.css}">
@@ -20,14 +20,21 @@
             <div class="row border border-2 rounded-4 mx-auto my-3" th:each="post : ${posts}">
                 <div class="col">
                     <div class="row row-cols-1 d-flex">
-                        <div class="col py-2 border-bottom border-2 text-center"
+                        <div class="col py-2 text-center"
                              th:text="${#temporals.format(post.createdAt, 'd MMM yyyy, HH:mm')}"></div>
-                        <div class="col mt-1 mb-2" th:text="${post.text}" th:if="${post.text != null}"></div>
+
+                        <div class="col border-top border-2 mt-1 mb-2" th:if="${post.text != '' && post.text != null}"
+                             th:text="${post.text}"></div>
 
                         <div class="col text-center p-0 border-top border-2 post___image" th:if="${post.image != null}">
                             <img class="rounded-bottom-4 img-fluid" th:src="@{${post.image}}" alt="Image">
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col">
+                    <div th:if="${posts.isEmpty()}">There is nothing :(</div>
                 </div>
             </div>
         </div>

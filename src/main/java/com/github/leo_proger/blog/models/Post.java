@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Base64;
 
 @Data
@@ -11,7 +12,7 @@ import java.util.Base64;
 @Table(name = "post")
 public class Post {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String text;
@@ -26,10 +27,18 @@ public class Post {
     }
 
     public void setImageUrl(String img) {
-        image = img;
+        if (img != null && !img.isEmpty()) {
+            image = img;
+            return;
+        }
+        throw new IllegalArgumentException("Image URL can't be empty");
     }
 
-    public void setImage(byte[] img) {
-        image = "data:image/jpg;base64," + Base64.getEncoder().encodeToString(img);
+    public void setImage(byte[] img, String filetype) {
+        if (img != null && img.length != 0) {
+            image = "data:" + filetype + ";base64," + Base64.getEncoder().encodeToString(img);
+            return;
+        }
+        throw new IllegalArgumentException("Image file can't be empty");
     }
 }
