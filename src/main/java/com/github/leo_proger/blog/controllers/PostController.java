@@ -24,11 +24,6 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping
-    public String all() {
-        return "redirect:/";
-    }
-
     @GetMapping("/create")
     public String createGet(Model model) {
         model.addAttribute("post", new PostDTO("", null, ""));

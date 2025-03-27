@@ -17,10 +17,6 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    public List<Post> findAll() {
-        return postRepository.findAll();
-    }
-
     public List<Post> findAllByOrderByCreatedAtDesc() {
         return postRepository.findAllByOrderByCreatedAtDesc();
     }
