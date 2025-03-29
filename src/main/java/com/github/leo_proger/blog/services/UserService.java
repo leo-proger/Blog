@@ -39,8 +39,11 @@ public class UserService {
     }
 
     public void authenticateUser(User user) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-        Authentication auth = authenticationManager.authenticate(authToken);
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        // Authenticate a user
+        Authentication authResponse = new UsernamePasswordAuthenticationToken(
+                user.getUsername(), user.getPassword(), user.getAuthorities()
+        );
+        // Save it in security context
+        SecurityContextHolder.getContext().setAuthentication(authResponse);
     }
 }

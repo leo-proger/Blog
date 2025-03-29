@@ -30,27 +30,20 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signupPost(
-            @ModelAttribute("user") @Valid UserDTO userDTO,
-            BindingResult bindingResult,
-            Model model
-    ) {
+    public String signupPost(@ModelAttribute("user") @Valid UserDTO userDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("user", userDTO);
             return "signup";
         }
 
-        User user = null;
         try {
-            user = userService.save(userDTO);
+            User user = userService.save(userDTO);
+            userService.authenticateUser(user);
         } catch (UserAlreadyExistsException e) {
             bindingResult.rejectValue("username", "error.username", e.getMessage());
             model.addAttribute("user", userDTO);
             return "signup";
         }
-//        if (user != null) {
-//            userService.authenticateUser(user);
-//        }
         return "redirect:/";
     }
 }

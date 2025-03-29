@@ -7,13 +7,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Slf4j
@@ -28,13 +30,9 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        String[] resources = {
-                "/css/**",
-                "/js/**",
-        };
+        String[] resources = {"/css/**", "/js/**"};
 
-        http
-                .authorizeHttpRequests((requests) -> requests
+        http.authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/bio").permitAll()
                         .requestMatchers(resources).permitAll()
                         .requestMatchers("/users/signup").permitAll()
@@ -43,12 +41,14 @@ public class WebSecurityConfig {
                 )
                 .formLogin((form) -> form
                         .loginPage("/users/login")
-                        .defaultSuccessUrl("/")
-                        .permitAll()
+                        .defaultSuccessUrl("/").permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .permitAll());
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
+                )
+                .securityContext((securityContext) -> securityContext
+                        .securityContextRepository(new HttpSessionSecurityContextRepository())
+                );
 
         return http.build();
     }
@@ -59,12 +59,12 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(userDetailsService())
-                .passwordEncoder(passwordEncoder())
-                .and()
-                .build();
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
+
+        return new ProviderManager(authenticationProvider);
     }
 
     @Bean
