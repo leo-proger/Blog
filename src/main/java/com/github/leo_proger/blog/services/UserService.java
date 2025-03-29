@@ -28,7 +28,7 @@ public class UserService {
 
     public User save(UserDTO userDTO) {
         if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
-            throw new UserAlreadyExistsException("User already exists: " + userDTO.getUsername());
+            throw new UserAlreadyExistsException("User already exists");
         }
         User user = new User();
         user.setUsername(userDTO.getUsername());
