@@ -35,13 +35,16 @@ public class UserController {
             BindingResult bindingResult,
             Model model
     ) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("user", userDTO);
+            return "signup";
+        }
+
         User user = null;
         try {
             user = userService.save(userDTO);
         } catch (UserAlreadyExistsException e) {
             bindingResult.rejectValue("username", "error.username", e.getMessage());
-        }
-        if (bindingResult.hasErrors()) {
             model.addAttribute("user", userDTO);
             return "signup";
         }
