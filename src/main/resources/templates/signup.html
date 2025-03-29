@@ -14,7 +14,8 @@
     <div class="container h-100 d-flex justify-content-center align-items-center text-center">
         <div class="row w-100">
             <div class="col">
-                <form th:action="@{/users/signup}" method="post" th:object="${user}" class="signup_form mx-auto">
+                <h1 class="mb-4">Sign Up</h1>
+                <form th:action="@{/users/signup}" method="post" th:object="${user}" class="signup_form mx-auto mb-2">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control"
                                th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''"
@@ -34,7 +35,8 @@
                                th:field="*{passwordConfirmation}">
                         <label for="password_confirmation_input">Confirm password</label>
                     </div>
-                    <div class="mb-3">
+
+                    <div>
                         <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
                         <span th:if="${!#fields.hasErrors('username') and #fields.hasErrors('password')}"
                               th:errors="*{password}"></span>
@@ -42,7 +44,7 @@
                               th:errors="*{passwordConfirmation}"></span>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-50 mb-1">Sign Up</button>
+                    <button type="submit" class="btn btn-primary w-50 mb-1 mt-2">Submit</button>
                     <div class="mb-1">Or</div>
                     <a class="btn btn-secondary w-50" th:href="@{/users/login}" role="button">Log In</a>
                 </form>
