@@ -34,7 +34,7 @@
                                th:field="*{passwordConfirmation}">
                         <label for="password_confirmation_input">Confirm password</label>
                     </div>
-                    <div class="text-danger">
+                    <div class="mb-3">
                         <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
                         <span th:if="${!#fields.hasErrors('username') and #fields.hasErrors('password')}"
                               th:errors="*{password}"></span>
