@@ -10,15 +10,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserDTO {
-    @NotNull(message = "Username cannot be empty")
-    @NotEmpty(message = "Username cannot be empty")
     @ValidUsername
-    @Size(min = 3, max = 30, message = "Username length must be of 3 to 30")
+    @Size(min = 3, max = 30, message = "Username length must be from 3 to 30")
     private String username;
 
-    @NotNull(message = "Password cannot be empty")
-    @NotEmpty(message = "Password cannot be empty")
-    @Size(min = 5, message = "Password length must be of 5 and more")
+    @Size(min = 5, message = "Password length must be 3 or more")
     private String password;
 
     @NotNull(message = "Password confirmation cannot be empty")
