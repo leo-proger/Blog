@@ -46,8 +46,8 @@ public class WebSecurityConfig {
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
                 )
-                .securityContext((securityContext) -> securityContext
-                        .securityContextRepository(new HttpSessionSecurityContextRepository())
+                .securityContext(securityContext ->
+                        securityContext.securityContextRepository(new HttpSessionSecurityContextRepository())
                 );
 
         return http.build();
