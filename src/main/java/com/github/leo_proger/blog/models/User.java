@@ -4,7 +4,6 @@ import com.github.leo_proger.blog.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,24 +21,22 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
 
+    @Column(nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    public User(String username, String password, UserRole role) {
-        this.username = User.this.username;
-        this.password = password;
-        this.role = role;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UserRole.ADMIN) {
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+            return List.of(
+                    new SimpleGrantedAuthority(UserRole.ADMIN.getRole()),
+                    new SimpleGrantedAuthority(UserRole.USER.getRole())
+            );
         }
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }

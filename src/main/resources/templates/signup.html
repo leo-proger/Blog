@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up</title>
+
+    <link th:replace="~{fragments/resources :: bootstrap_css}">
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/signup.css}">
+</head>
+<body>
+    <div class="container h-100 d-flex justify-content-center align-items-center text-center">
+        <div class="row w-100">
+            <div class="col">
+                <form th:action="@{/users/signup}" method="post" th:object="${user}" class="signup_form mx-auto">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control"
+                               th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''"
+                               id="username_input" placeholder="Username" th:field="*{username}">
+                        <label for="username_input">Username</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control"
+                               th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
+                               id="password_input" placeholder="Password" th:field="*{password}">
+                        <label for="password_input">Password</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control"
+                               th:classappend="${#fields.hasErrors('passwordConfirmation')} ? 'is-invalid' : ''"
+                               id="password_confirmation_input" placeholder="Password"
+                               th:field="*{passwordConfirmation}">
+                        <label for="password_confirmation_input">Confirm password</label>
+                    </div>
+                    <div class="text-danger">
+                        <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+                        <span th:if="${!#fields.hasErrors('username') and #fields.hasErrors('password')}"
+                              th:errors="*{password}"></span>
+                        <span th:if="${!#fields.hasErrors('username') and !#fields.hasErrors('password') and #fields.hasErrors('passwordConfirmation')}"
+                              th:errors="*{passwordConfirmation}"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-50 mb-1">Sign Up</button>
+                    <div class="mb-1">Or</div>
+                    <a class="btn btn-secondary w-50" th:href="@{/users/login}" role="button">Log In</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script th:replace="~{fragments/resources :: bootstrap_js}"></script>
+</body>
+</html>

@@ -7,14 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class MainController {
-
     private final PostService postService;
 
     public MainController(PostService postService) {
         this.postService = postService;
     }
 
-    @GetMapping
+    @GetMapping({"/", "/posts"})
     public String index(Model model) {
         model.addAttribute(
                 "posts", postService.findAllByOrderByCreatedAtDesc()

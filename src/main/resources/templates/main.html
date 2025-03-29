@@ -73,9 +73,9 @@
                     </div>
                 </div>
             </div>
-            <div class="row text-center">
+            <div class="row text-center" th:if="${posts.isEmpty()}">
                 <div class="col">
-                    <div th:if="${posts.isEmpty()}">There is nothing :(</div>
+                    <span>There is nothing :(</span>
                 </div>
             </div>
         </div>
