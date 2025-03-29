@@ -34,11 +34,11 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UserRole.ADMIN) {
             return List.of(
-                    new SimpleGrantedAuthority(UserRole.ADMIN.getRole()),
-                    new SimpleGrantedAuthority(UserRole.USER.getRole())
+                    new SimpleGrantedAuthority(UserRole.ADMIN.getAuthority()),
+                    new SimpleGrantedAuthority(UserRole.USER.getAuthority())
             );
         }
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority(UserRole.USER.getAuthority()));
     }
 
     @Override
