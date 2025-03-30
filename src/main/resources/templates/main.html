@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -24,11 +24,12 @@
                  class="row border border-2 rounded-4 mx-auto my-3">
                 <div class="col">
                     <div class="row d-flex">
-                        <div class="col d-flex justify-content-start align-items-center">
+                        <div class="col d-flex align-items-center"
+                             th:classappend="${#authorization.expression('hasRole(''ADMIN'')')} ? 'justify-content-start' : 'justify-content-center'">
                             <span class="text-center"
                                   th:text="${#temporals.format(post.createdAt, 'd MMM yyyy, HH:mm')}"></span>
                         </div>
-                        <div class="col d-flex justify-content-end">
+                        <div class="col d-flex justify-content-end" sec:authorize="hasRole('ADMIN')">
                             <button type="button" class="delete_post_btn" data-bs-toggle="modal"
                                     data-bs-target="#confirmDeleteModal"
                                     th:data-post-id="${post.id}">
@@ -63,7 +64,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         <div class="col-12 border-top border-2 mt-1 mb-2"
                              th:if="${post.text != '' && post.text != null}"
