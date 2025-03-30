@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <body>
+    <!-- TODO: Rewrite navbar -->
     <header th:fragment="header">
         <nav class="navbar navbar-expand-md bg-body-tertiary">
             <div class="header__container container">
@@ -28,7 +29,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col" sec:authorize="hasRole('ADMIN')">
                         <a th:href="@{/posts/create}">Create Post</a>
                     </div>
                 </div>
