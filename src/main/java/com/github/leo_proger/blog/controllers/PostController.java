@@ -31,19 +31,18 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public String createPost(@Valid @ModelAttribute("post") PostDTO postDTO,
-                             BindingResult bindingResult) throws IOException {
+    public String createPost(@Valid @ModelAttribute("post") PostDTO postDTO, BindingResult bindingResult) throws IOException {
         String postText = postDTO.getText();
         String postImageUrl = postDTO.getImageUrl();
         MultipartFile postImageFile = postDTO.getImageFile();
 
         if ((postText == null || postText.isBlank())
-            && (postImageUrl == null || postImageUrl.isBlank())
-            && (postImageFile == null || postImageFile.isEmpty())) {
+                && (postImageUrl == null || postImageUrl.isBlank())
+                && (postImageFile == null || postImageFile.isEmpty())) {
             bindingResult.rejectValue("text", "error.text", "At least one param must be not null");
         }
         if (postImageFile != null && !postImageFile.isEmpty()
-            && postImageUrl != null && !postImageUrl.isBlank()) {
+                && postImageUrl != null && !postImageUrl.isBlank()) {
             bindingResult.rejectValue("imageUrl", "error.image", "You can add only one image");
         }
 
@@ -86,7 +85,7 @@ public class PostController {
         return "redirect:/";
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/delete/{id}")
     public String deletePost(@PathVariable Long id) {
         postService.deleteById(id);
         return "redirect:/";

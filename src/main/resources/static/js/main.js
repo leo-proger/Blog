@@ -17,12 +17,11 @@ document.addEventListener('DOMContentLoaded', function () {
         deletePostFinalBtn.addEventListener('click', function () {
                 if (postIdToDelete) {
                     // Send DELETE request to the server
-                    fetch(`posts/${postIdToDelete}`, {
+                    fetch(`/posts/delete/${postIdToDelete}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            // Add CSRF application uses Spring Security
-                            // 'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').getAttribute('content')
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').getAttribute('content')
                         }
                     })
                         .then(response => {
