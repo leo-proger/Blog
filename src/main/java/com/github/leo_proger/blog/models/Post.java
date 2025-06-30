@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Data
 @Entity
@@ -19,7 +22,9 @@ public class Post {
     @Lob
     private String image;
 
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
+
+    private Set<Long> usersLiked = new HashSet<>(); // Users who liked the post
 
     public Post() {
         this.createdAt = LocalDateTime.now();
@@ -37,5 +42,40 @@ public class Post {
             throw new IllegalArgumentException("Image file can't be empty");
         }
         image = "data:" + filetype + ";base64," + Base64.getEncoder().encodeToString(img);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Post post = (Post) o;
+        return Objects.equals(id, post.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
+    public void addLike(Long userID) {
+        usersLiked.add(userID);
+    }
+
+    public void removeLike(Long userID) {
+        usersLiked.remove(userID);
+    }
+
+    public Integer getLikesCount() {
+        return usersLiked.size();
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", image='" + image + '\'' +
+                ", createdAt=" + createdAt +
+                ", usersLiked=" + usersLiked +
+                '}';
     }
 }
