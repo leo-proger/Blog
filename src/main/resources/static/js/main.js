@@ -1,3 +1,7 @@
+const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+console.log(csrfHeader, csrfToken)
+
 document.addEventListener('DOMContentLoaded', function () {
     // Variable to store the post ID that will be deleted
     let postIdToDelete = null;
@@ -21,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').getAttribute('content')
+                            [csrfHeader]: csrfToken
                         }
                     })
                         .then(response => {
@@ -66,3 +70,21 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 })
 ;
+
+const likeButtons = document.getElementsByClassName("like_btn");
+
+for (let btn of likeButtons) {
+    btn.addEventListener("click", function () {
+        const postId = btn.getAttribute("data-post-id");
+
+        fetch(`/posts/like/${postId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                [csrfHeader]: csrfToken
+            }
+        }).then(r => function () {
+
+        });
+    });
+}
