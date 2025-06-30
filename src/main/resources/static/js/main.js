@@ -1,6 +1,5 @@
 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
 const csrfToken = document.querySelector('meta[name="_csrf"]').content;
-console.log(csrfHeader, csrfToken)
 
 document.addEventListener('DOMContentLoaded', function () {
     // Variable to store the post ID that will be deleted
@@ -66,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         )
-        ;
     }
 })
 ;
@@ -83,8 +81,18 @@ for (let btn of likeButtons) {
                 "Content-Type": "application/json",
                 [csrfHeader]: csrfToken
             }
-        }).then(r => function () {
-
-        });
+        }).then(r => {
+            if (!r.ok) {
+                console.log("Some error occurred")
+            }
+            return r.json();
+        }).then(data => {
+            const action = data["Action"].toLowerCase();
+            if (action === "add") {
+                btn.querySelector("i").setAttribute("class", "fa-solid fa-heart");
+            } else {
+                btn.querySelector("i").setAttribute("class", "fa-regular fa-heart");
+            }
+        })
     });
 }

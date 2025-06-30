@@ -4,9 +4,7 @@ import com.github.leo_proger.blog.models.Post;
 import com.github.leo_proger.blog.models.User;
 import com.github.leo_proger.blog.repositories.PostRepository;
 import com.github.leo_proger.blog.repositories.UserRepository;
-import jakarta.transaction.TransactionScoped;
 import jakarta.transaction.Transactional;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,7 +37,7 @@ public class PostService {
         postRepository.deleteById(id);
     }
 
-    public void likePost(Long postID, Long detachedUserID) {
+    public String likePost(Long postID, Long detachedUserID) {
         // Since it's a transaction, new session has started and Hibernate isn't capturing changes for user from controller
         Post post = postRepository.findById(postID)
                 .orElseThrow(() -> new IllegalArgumentException("Post with id " + postID + " does not exist"));
@@ -51,9 +49,11 @@ public class PostService {
         if (usersLiked.contains(user) && user.getLikedPosts().contains(post)) {
             post.removeLike(user);
             user.removeLikedPost(post);
+            return "REMOVE";
         } else {
             post.addLike(user);
             user.addLikedPost(post);
+            return "ADD";
         }
     }
 }

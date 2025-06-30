@@ -5,7 +5,8 @@ import com.github.leo_proger.blog.models.Post;
 import com.github.leo_proger.blog.models.User;
 import com.github.leo_proger.blog.services.PostService;
 import jakarta.validation.Valid;
-import org.springframework.security.core.Authentication;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Map;
 
 
 @Controller
@@ -94,9 +96,10 @@ public class PostController {
         return "redirect:/";
     }
 
+    @ResponseBody
     @PostMapping("/like/{postID}")
-    public String likePost(@PathVariable Long postID, @AuthenticationPrincipal User user) {
-        postService.likePost(postID, user.getId());
-        return "redirect:/";
+    public ResponseEntity<Map<String, String>> likePost(@PathVariable Long postID, @AuthenticationPrincipal User user) {
+        String action = postService.likePost(postID, user.getId());
+        return new ResponseEntity<>(Map.of("Action", action), HttpStatus.OK);
     }
 }
