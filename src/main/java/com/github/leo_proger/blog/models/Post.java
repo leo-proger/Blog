@@ -24,7 +24,7 @@ public class Post {
 
     private final LocalDateTime createdAt;
 
-    @ManyToMany(mappedBy = "likedPosts", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "likedPosts", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Set<User> usersLiked = new HashSet<>(); // Users who liked the post
 
     public Post() {
