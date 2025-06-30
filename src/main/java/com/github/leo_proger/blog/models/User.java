@@ -27,8 +27,21 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "post_like",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
+    private final Set<Post> likedPosts = new HashSet<>(); // Posts that is liked by a user
 
-    private final Set<Long> likedPosts = new HashSet<>(); // Posts that is liked by a user
+    public void addLikedPost(Post post) {
+        likedPosts.add(post);
+    }
+
+    public void removeLikedPost(Post post) {
+        likedPosts.remove(post);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -85,7 +98,6 @@ public class User implements UserDetails {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +
-                ", likedPosts=" + likedPosts +
                 '}';
     }
 }

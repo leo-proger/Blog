@@ -24,10 +24,23 @@ public class Post {
 
     private final LocalDateTime createdAt;
 
-    private Set<Long> usersLiked = new HashSet<>(); // Users who liked the post
+    @ManyToMany(mappedBy = "likedPosts", cascade = CascadeType.ALL)
+    private Set<User> usersLiked = new HashSet<>(); // Users who liked the post
 
     public Post() {
         this.createdAt = LocalDateTime.now();
+    }
+
+    public void addLike(User user) {
+        usersLiked.add(user);
+    }
+
+    public void removeLike(User user) {
+        usersLiked.remove(user);
+    }
+
+    public Integer getLikesCount() {
+        return usersLiked.size();
     }
 
     public void setImageUrl(String img) {
@@ -54,28 +67,5 @@ public class Post {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
-    }
-
-    public void addLike(Long userID) {
-        usersLiked.add(userID);
-    }
-
-    public void removeLike(Long userID) {
-        usersLiked.remove(userID);
-    }
-
-    public Integer getLikesCount() {
-        return usersLiked.size();
-    }
-
-    @Override
-    public String toString() {
-        return "Post{" +
-                "id=" + id +
-                ", text='" + text + '\'' +
-                ", image='" + image + '\'' +
-                ", createdAt=" + createdAt +
-                ", usersLiked=" + usersLiked +
-                '}';
     }
 }

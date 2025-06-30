@@ -6,6 +6,7 @@ import com.github.leo_proger.blog.models.User;
 import com.github.leo_proger.blog.services.PostService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -94,10 +95,8 @@ public class PostController {
     }
 
     @PostMapping("/like/{postID}")
-    public String likePost(@PathVariable Long postID, Authentication auth) {
-        if (auth.getPrincipal() instanceof User user) {
-            postService.likePost(postID, user);
-        }
+    public String likePost(@PathVariable Long postID, @AuthenticationPrincipal User user) {
+        postService.likePost(postID, user.getId());
         return "redirect:/";
     }
 }
