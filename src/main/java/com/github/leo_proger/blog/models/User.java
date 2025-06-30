@@ -3,16 +3,13 @@ package com.github.leo_proger.blog.models;
 import com.github.leo_proger.blog.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Data
-@NoArgsConstructor
 @Entity
 @Table(name = "user_entity")
 public class User implements UserDetails {
@@ -29,6 +26,9 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+
+    private final Set<Long> likedPosts = new HashSet<>(); // Posts that is liked by a user
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -64,5 +64,28 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", likedPosts=" + likedPosts +
+                '}';
     }
 }
