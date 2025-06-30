@@ -1,4 +1,4 @@
-package com.github.leo_proger.blog.security;
+package com.github.leo_proger.blog.services;
 
 import com.github.leo_proger.blog.models.User;
 import com.github.leo_proger.blog.repositories.UserRepository;

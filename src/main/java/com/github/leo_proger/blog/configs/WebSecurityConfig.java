@@ -2,7 +2,7 @@ package com.github.leo_proger.blog.configs;
 
 import com.github.leo_proger.blog.enums.UserRole;
 import com.github.leo_proger.blog.repositories.UserRepository;
-import com.github.leo_proger.blog.security.CustomUserDetailsService;
+import com.github.leo_proger.blog.services.CustomUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
