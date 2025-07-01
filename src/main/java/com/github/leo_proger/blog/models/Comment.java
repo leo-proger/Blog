@@ -21,6 +21,9 @@ public class Comment {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "text", nullable = false)
+    private String text;
+
     public Comment() {
         this.createdAt = LocalDateTime.now();
     }
