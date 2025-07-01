@@ -36,7 +36,7 @@ public class User implements UserDetails {
     private final Set<Post> likedPosts = new HashSet<>(); // Posts which is liked by a user
 
     @OneToMany(mappedBy = "author")
-    private final Set<PostComment> comments = new HashSet<>(); // Comments which user wrote
+    private final Set<Comment> comments = new HashSet<>(); // Comments which user wrote
 
     public void addLikedPost(Post post) {
         likedPosts.add(post);

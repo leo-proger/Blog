@@ -28,7 +28,7 @@ public class Post {
     private final Set<User> usersLiked = new HashSet<>(); // Users who liked the post
 
     @OneToMany(mappedBy = "post")
-    private final Set<PostComment> comments = new HashSet<>(); // Comments on the post
+    private final Set<Comment> comments = new HashSet<>(); // Comments on the post
 
     public Post() {
         this.createdAt = LocalDateTime.now();

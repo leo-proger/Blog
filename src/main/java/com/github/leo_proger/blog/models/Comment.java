@@ -5,25 +5,23 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class PostComment {
+public class Comment {
 
-    @EmbeddedId
-    private PostCommentKey id;
+    @Id
+    private Long id;
 
     @ManyToOne
-    @MapsId("userID")
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
     @ManyToOne
-    @MapsId("postID")
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    public PostComment() {
+    public Comment() {
         this.createdAt = LocalDateTime.now();
     }
 }
