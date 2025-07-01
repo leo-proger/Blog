@@ -78,8 +78,7 @@
                         <div class="border-top border-2">
                             <button type="button" class="like-btn btn btn-lg m-0 p-0"
                                     th:data-post-id="${post.id}">
-                                <i class="fa-regular fa-heart"></i>
-                                <span th:text="${post.getLikesCount()}"></span>
+                                <i th:class="${post.getUsersLiked().contains(#authentication.getPrincipal()) ? 'like-icon fa-solid fa-heart' : 'like-icon fa-regular fa-heart'}"></i>
                                 <span class="likes-count" th:text="${post.getLikesCount()}"></span>
                             </button>
                         </div>
