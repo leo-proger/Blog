@@ -25,7 +25,10 @@ public class Post {
     private final LocalDateTime createdAt;
 
     @ManyToMany(mappedBy = "likedPosts", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private Set<User> usersLiked = new HashSet<>(); // Users who liked the post
+    private final Set<User> usersLiked = new HashSet<>(); // Users who liked the post
+
+    @OneToMany(mappedBy = "post")
+    private final Set<PostComment> comments = new HashSet<>(); // Comments on the post
 
     public Post() {
         this.createdAt = LocalDateTime.now();

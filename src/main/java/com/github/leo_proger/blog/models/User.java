@@ -33,7 +33,10 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id")
     )
-    private final Set<Post> likedPosts = new HashSet<>(); // Posts that is liked by a user
+    private final Set<Post> likedPosts = new HashSet<>(); // Posts which is liked by a user
+
+    @OneToMany(mappedBy = "author")
+    private final Set<PostComment> comments = new HashSet<>(); // Comments which user wrote
 
     public void addLikedPost(Post post) {
         likedPosts.add(post);
