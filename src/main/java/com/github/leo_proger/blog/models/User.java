@@ -31,7 +31,8 @@ public class User implements UserDetails {
     @JoinTable(
             name = "post_like",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id")
+            inverseJoinColumns = @JoinColumn(name = "post_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "post_id"})
     )
     private final Set<Post> likedPosts = new HashSet<>(); // Posts which is liked by a user
 
