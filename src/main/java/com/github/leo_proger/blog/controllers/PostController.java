@@ -1,8 +1,11 @@
 package com.github.leo_proger.blog.controllers;
 
+import com.github.leo_proger.blog.dto.CommentDTO;
 import com.github.leo_proger.blog.dto.PostDTO;
+import com.github.leo_proger.blog.models.Comment;
 import com.github.leo_proger.blog.models.Post;
 import com.github.leo_proger.blog.models.User;
+import com.github.leo_proger.blog.services.CommentService;
 import com.github.leo_proger.blog.services.PostService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -17,16 +20,20 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 
 @Controller
 @RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
+    private final CommentService commentService;
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService, CommentService commentService) {
         this.postService = postService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/create")
@@ -101,5 +108,19 @@ public class PostController {
     public ResponseEntity<Map<String, String>> likePost(@PathVariable Long postID, @AuthenticationPrincipal User user) {
         String action = postService.likePost(postID, user.getId());
         return new ResponseEntity<>(Map.of("Action", action), HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @GetMapping("/comments/{postID}")
+    public ResponseEntity<Map<String, Set<CommentDTO>>> getComments(@PathVariable Long postID) {
+        Set<Comment> postComments = commentService.findCommentsByPostId(postID);
+        Set<CommentDTO> commentDTOs = new HashSet<>();
+
+        for (Comment postComment : postComments) {
+            commentDTOs.add(CommentDTO.toDTO(postComment));
+        }
+        System.out.println(commentDTOs);
+
+        return new ResponseEntity<>(Map.of("Comments", commentDTOs), HttpStatus.OK);
     }
 }
