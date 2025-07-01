@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
 })
 ;
 
-const likeButtons = document.getElementsByClassName("like_btn");
+const likeButtons = document.getElementsByClassName("like-btn");
 
 for (let btn of likeButtons) {
     btn.addEventListener("click", function () {
@@ -88,10 +88,14 @@ for (let btn of likeButtons) {
             return r.json();
         }).then(data => {
             const action = data["Action"].toLowerCase();
+            const likesCount = parseInt(btn.querySelector(".likes-count").textContent)
+
             if (action === "add") {
-                btn.querySelector("i").setAttribute("class", "fa-solid fa-heart");
+                btn.querySelector(".like-icon").setAttribute("class", "like-icon fa-solid fa-heart");
+                btn.querySelector(".likes-count").textContent = "" + (likesCount + 1);
             } else {
-                btn.querySelector("i").setAttribute("class", "fa-regular fa-heart");
+                btn.querySelector(".like-icon").setAttribute("class", "like-icon fa-regular fa-heart");
+                btn.querySelector(".likes-count").textContent = "" + (likesCount - 1);
             }
         })
     });

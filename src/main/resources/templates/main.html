@@ -76,10 +76,11 @@
                         </div>
 
                         <div class="border-top border-2">
-                            <button type="button" class="like_btn btn btn-lg m-0 p-0"
+                            <button type="button" class="like-btn btn btn-lg m-0 p-0"
                                     th:data-post-id="${post.id}">
                                 <i class="fa-regular fa-heart"></i>
                                 <span th:text="${post.getLikesCount()}"></span>
+                                <span class="likes-count" th:text="${post.getLikesCount()}"></span>
                             </button>
                         </div>
                     </div>
