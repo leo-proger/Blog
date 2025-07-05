@@ -20,7 +20,7 @@
 
     <main>
         <div class="wall container-md">
-            <!--A post-->
+            <!-- A post -->
             <div th:each="post : ${posts}" th:id="'post_id_' + ${post.id}"
                  class="row border border-2 rounded-4 mx-auto my-3">
                 <div class="col">
@@ -37,7 +37,7 @@
                                 <i class="fa-solid fa-trash"></i>
                             </button>
 
-                            <!-- Modal -->
+                            <!-- Modal to delete post-->
                             <div class="modal fade" id="confirmDeleteModal" tabindex="-1"
                                  aria-labelledby="confirmDeleteModalLabel"
                                  aria-hidden="true">
@@ -76,11 +76,59 @@
                         </div>
 
                         <div class="border-top border-2">
-                            <button type="button" class="like-btn btn btn-lg m-0 p-0"
+                            <button type="button" class="like-btn btn btn-lg m-1 p-0 border-0"
                                     th:data-post-id="${post.id}">
                                 <i th:class="${post.getUsersLiked().contains(#authentication.getPrincipal()) ? 'like-icon fa-solid fa-heart' : 'like-icon fa-regular fa-heart'}"></i>
                                 <span class="likes-count" th:text="${post.getLikesCount()}"></span>
                             </button>
+                            <button type="button" class="comments-btn btn btn-lg m-1 ms-3 p-0 border-0"
+                                    data-bs-toggle="modal" th:data-bs-target="'#comments-modal-' + ${post.getId()}">
+                                <i th:class="${post.getCommentsCount() == 0 ? 'fa-regular fa-comment' : 'fa-solid fa-comment'}"></i>
+                                <span class="comments-count" th:text="${post.getCommentsCount()}"></span>
+                            </button>
+
+                            <!-- Modal to see comments -->
+                            <div class="modal fade modal-lg" th:id="'comments-modal-' + ${post.getId()}" tabindex="-1"
+                                 aria-labelledby="comments-modal-label"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5"
+                                                th:id="'comments-modal-label-' + ${post.getId()}">Comments</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div th:if="${post.getCommentsCount() == 0}" class="text-center">
+                                                <span>There's nothing</span>
+                                            </div>
+                                            <div th:each="comment : ${post.getComments()}" class="row">
+                                                <div class="col-12">
+                                                    <div class="comment-info row">
+                                                        <div class="comment-author-name col">
+                                                            <span th:if="${#authentication.getName().equals(comment.getAuthor().getUsername())}">
+                                                                <b th:text="'@' + ${comment.getAuthor().getUsername()} + ' (you)'"></b>
+                                                            </span>
+                                                            <span th:unless="${#authentication.getName().equals(comment.getAuthor().getUsername())}"
+                                                                  th:text="'@' + ${comment.getAuthor().getUsername()}"></span>
+                                                        </div>
+                                                        <div class="comment-creation-time col text-end text-muted">
+                                                            <span th:text="${#temporals.format(comment.getCreatedAt(), 'd MMM yyyy, HH:mm')}"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="comment-text row">
+                                                        <p th:text="${comment.getText()}"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <!-- TODO: поле для написания коммента -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

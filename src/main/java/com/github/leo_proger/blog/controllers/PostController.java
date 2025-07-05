@@ -119,7 +119,6 @@ public class PostController {
         for (Comment postComment : postComments) {
             commentDTOs.add(CommentDTO.toDTO(postComment));
         }
-        System.out.println(commentDTOs);
 
         return new ResponseEntity<>(Map.of("Comments", commentDTOs), HttpStatus.OK);
     }

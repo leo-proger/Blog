@@ -17,3 +17,8 @@
     color: #5d5d5d;
     transform: scale(1.05);
 }
+
+.comment-text {
+    overflow-wrap: break-word;
+    white-space: normal;
+}
