@@ -46,6 +46,10 @@ public class Post {
         return usersLiked.size();
     }
 
+    public Integer getCommentsCount() {
+        return comments.size();
+    }
+
     public void setImageUrl(String img) {
         if (img == null || img.isEmpty()) {
             throw new IllegalArgumentException("Image URL can't be empty");
