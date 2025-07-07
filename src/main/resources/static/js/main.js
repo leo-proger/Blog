@@ -1,6 +1,10 @@
 // Delete a post
 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
 const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+const defaultHeaders = {
+    "Content-Type": "application/json",
+    [csrfHeader]: csrfToken
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     // Variable to store the post ID that will be deleted
@@ -23,10 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Send DELETE request to the server
                     fetch(`/posts/delete/${postIdToDelete}`, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            [csrfHeader]: csrfToken
-                        }
+                        headers: defaultHeaders
                     })
                         .then(response => {
                                 if (response.ok) {
@@ -74,14 +75,11 @@ const likeButtons = document.getElementsByClassName("like-btn");
 
 for (let btn of likeButtons) {
     btn.addEventListener("click", function () {
-        const postId = btn.getAttribute("data-post-id");
+        const postID = btn.getAttribute("data-post-id");
 
-        fetch(`/posts/like/${postId}`, {
+        fetch(`/posts/like/${postID}`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                [csrfHeader]: csrfToken
-            }
+            headers: defaultHeaders
         }).then(r => {
             if (!r.ok) {
                 throw new Error("Error occurred on liking the post")
@@ -100,6 +98,26 @@ for (let btn of likeButtons) {
             }
         })
     });
+}
+
+// Send comment button
+const sendCommentForm = document.getElementsByClassName("send-comment-form")
+
+for (let formElement of sendCommentForm) {
+    formElement.addEventListener("submit", e => {
+        e.preventDefault()
+        const form = e.target
+
+        fetch(form.action, {
+            method: "POST",
+            headers: {
+                [csrfHeader]: csrfToken
+            },
+            body: new FormData(form)
+        }).then(r => {
+            console.log(r.status)
+        })
+    })
 }
 
 // Message box

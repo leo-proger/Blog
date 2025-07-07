@@ -107,12 +107,11 @@ public class PostController {
         return new ResponseEntity<>(Map.of("Action", action), HttpStatus.OK);
     }
 
+    @ResponseBody
     @PostMapping("/comments/create/{postID}")
-    public String createComment(@ModelAttribute("text") String text, @PathVariable Long postID, Principal principal) {
-        System.out.println(principal.getName());
-        System.out.println(postID);
+    public ResponseEntity<HttpStatus> createComment(@RequestParam("text") String text, @PathVariable Long postID, Principal principal) {
         System.out.println(text);
         commentService.createComment(principal.getName(), postID, text);
-        return "redirect:/";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

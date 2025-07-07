@@ -125,7 +125,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <form th:action="@{'/posts/comments/create/' + ${post.getId()}}"
-                                                  method="POST" class="w-100">
+                                                  method="POST" class="send-comment-form w-100">
                                                 <div class="d-flex align-items-end">
                                                     <label for="comment-text"></label>
                                                     <textarea class="form-control me-2"
@@ -136,7 +136,8 @@
                                                               rows="1"
                                                               style="resize: none; overflow-y: auto; max-height: 150px;"
                                                     ></textarea>
-                                                    <button type="submit" class="btn btn-primary">
+                                                    <button type="submit" class="btn btn-primary"
+                                                            th:data-post-id="${post.getId()}">
                                                         <i class="fa-solid fa-paper-plane-top"></i>
                                                     </button>
                                                 </div>
