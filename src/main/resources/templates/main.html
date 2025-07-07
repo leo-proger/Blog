@@ -110,8 +110,8 @@
                                                             <span th:if="${#authentication.getName().equals(comment.getAuthor().getUsername())}">
                                                                 <b th:text="'@' + ${comment.getAuthor().getUsername()} + ' (you)'"></b>
                                                             </span>
-                                                            <span th:unless="${#authentication.getName().equals(comment.getAuthor().getUsername())}"
-                                                                  th:text="'@' + ${comment.getAuthor().getUsername()}"></span>
+                                                            <span th:text="'@' + ${comment.getAuthor().getUsername()}"
+                                                                  th:unless="${#authentication.getName().equals(comment.getAuthor().getUsername())}"></span>
                                                         </div>
                                                         <div class="comment-creation-time col text-end text-muted">
                                                             <span th:text="${#temporals.format(comment.getCreatedAt(), 'd MMM yyyy, HH:mm')}"></span>
@@ -124,7 +124,23 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <!-- TODO: поле для написания коммента -->
+                                            <form th:action="@{'/posts/comments/create/' + ${post.getId()}}"
+                                                  method="POST" class="w-100">
+                                                <div class="d-flex align-items-end">
+                                                    <label for="comment-text"></label>
+                                                    <textarea class="form-control me-2"
+                                                              id="comment-text"
+                                                              name="text"
+                                                              placeholder="U can write smth here ;)"
+                                                              required
+                                                              rows="1"
+                                                              style="resize: none; overflow-y: auto; max-height: 150px;"
+                                                    ></textarea>
+                                                    <button type="submit" class="btn btn-primary">
+                                                        <i class="fa-solid fa-paper-plane-top"></i>
+                                                    </button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -133,10 +149,10 @@
                     </div>
                 </div>
             </div>
-            <div class="row text-center" th:if="${posts.isEmpty()}">
-                <div class="col">
-                    <span>There is nothing :(</span>
-                </div>
+        </div>
+        <div class="row text-center" th:if="${posts.isEmpty()}">
+            <div class="col">
+                <span>There is nothing :(</span>
             </div>
         </div>
     </main>

@@ -1,8 +1,6 @@
 package com.github.leo_proger.blog.controllers;
 
-import com.github.leo_proger.blog.dto.CommentDTO;
 import com.github.leo_proger.blog.dto.PostDTO;
-import com.github.leo_proger.blog.models.Comment;
 import com.github.leo_proger.blog.models.Post;
 import com.github.leo_proger.blog.models.User;
 import com.github.leo_proger.blog.services.CommentService;
@@ -20,9 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashSet;
+import java.security.Principal;
 import java.util.Map;
-import java.util.Set;
 
 
 @Controller
@@ -110,16 +107,12 @@ public class PostController {
         return new ResponseEntity<>(Map.of("Action", action), HttpStatus.OK);
     }
 
-    @ResponseBody
-    @GetMapping("/comments/{postID}")
-    public ResponseEntity<Map<String, Set<CommentDTO>>> getComments(@PathVariable Long postID) {
-        Set<Comment> postComments = commentService.findCommentsByPostId(postID);
-        Set<CommentDTO> commentDTOs = new HashSet<>();
-
-        for (Comment postComment : postComments) {
-            commentDTOs.add(CommentDTO.toDTO(postComment));
-        }
-
-        return new ResponseEntity<>(Map.of("Comments", commentDTOs), HttpStatus.OK);
+    @PostMapping("/comments/create/{postID}")
+    public String createComment(@ModelAttribute("text") String text, @PathVariable Long postID, Principal principal) {
+        System.out.println(principal.getName());
+        System.out.println(postID);
+        System.out.println(text);
+        commentService.createComment(principal.getName(), postID, text);
+        return "redirect:/";
     }
 }

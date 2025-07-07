@@ -1,3 +1,4 @@
+// Delete a post
 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
 const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 
@@ -67,8 +68,8 @@ document.addEventListener('DOMContentLoaded', function () {
         )
     }
 })
-;
 
+// Like a post
 const likeButtons = document.getElementsByClassName("like-btn");
 
 for (let btn of likeButtons) {
@@ -83,7 +84,7 @@ for (let btn of likeButtons) {
             }
         }).then(r => {
             if (!r.ok) {
-                console.log("Some error occurred")
+                throw new Error("Error occurred on liking the post")
             }
             return r.json();
         }).then(data => {
@@ -100,3 +101,13 @@ for (let btn of likeButtons) {
         })
     });
 }
+
+// Message box
+document.addEventListener("DOMContentLoaded", function () {
+    const textarea = document.getElementById("comment-text");
+
+    textarea.addEventListener("input", function () {
+        textarea.style.height = "auto"; // Reset height
+        textarea.style.height = Math.min(textarea.scrollHeight, 150) + "px";
+    });
+});
