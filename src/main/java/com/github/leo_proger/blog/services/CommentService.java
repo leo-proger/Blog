@@ -1,5 +1,6 @@
 package com.github.leo_proger.blog.services;
 
+import com.github.leo_proger.blog.dto.CommentDTO;
 import com.github.leo_proger.blog.exceptions.PostNotFoundException;
 import com.github.leo_proger.blog.exceptions.UserNotFoundException;
 import com.github.leo_proger.blog.models.Comment;
@@ -25,7 +26,7 @@ public class CommentService {
     }
 
 
-    public void createComment(String authorName, Long postID, String text) {
+    public CommentDTO createComment(String authorName, Long postID, String text) {
         Comment comment = new Comment();
 
         Optional<User> authorOptional = userRepository.findByUsername(authorName);
@@ -43,6 +44,6 @@ public class CommentService {
         }
 
         comment.setText(text);
-        commentRepository.save(comment);
+        return CommentDTO.toDTO(commentRepository.save(comment));
     }
 }

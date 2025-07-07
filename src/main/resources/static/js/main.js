@@ -115,9 +115,92 @@ for (let formElement of sendCommentForm) {
             },
             body: new FormData(form)
         }).then(r => {
-            console.log(r.status)
+            if (!r.ok) {
+                throw new Error("Error creating the comment")
+            }
+            return r.json();
+        }).then(data => {
+            const commentText = data["Comment"]["text"]
+            const commentPostID = data["Comment"]["postID"]
+            const commentAuthorName = data["Comment"]["authorName"]
+
+            // Add the new comment to the list
+            addCommentToList(commentText, commentPostID, commentAuthorName);
+
+            // Update counter
+            updateCommentsCount(commentPostID);
+
+            // Empty the form
+            form.text.value = '';
+
+            // Hide "There's nothing"
+            hideEmptyMessage(commentPostID);
         })
     })
+}
+
+function addCommentToList(commentText, postID, authorName) {
+    const modalBody = document.querySelector(`#comments-modal-${postID} .modal-body`);
+
+    // Get current time
+    const now = new Date();
+    const timeStr = now.toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    const commentHTML = `
+        <div class="row">
+            <div class="col-12">
+                <div class="comment-info row">
+                    <div class="comment-author-name col">
+                        <span><b>@${authorName} (you)</b></span>
+                    </div>
+                    <div class="comment-creation-time col text-end text-muted">
+                        <span>${timeStr}</span>
+                    </div>
+                </div>
+                <div class="comment-text row">
+                    <p>${commentText}</p>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Add the comment in the beginning
+    const firstComment = modalBody.querySelector('.row:not(.text-center)');
+    if (firstComment) {
+        firstComment.insertAdjacentHTML('beforebegin', commentHTML);
+    } else {
+        modalBody.insertAdjacentHTML('beforeend', commentHTML);
+    }
+}
+
+function updateCommentsCount(postID) {
+    const commentsBtn = document.querySelector(`button[data-bs-target="#comments-modal-${postID}"]`);
+    const countSpan = commentsBtn.querySelector('.comments-count');
+    const icon = commentsBtn.querySelector('i');
+
+    let currentCount = parseInt(countSpan.textContent);
+    currentCount++;
+    countSpan.textContent = currentCount;
+
+    // Change the comment icon from empty to filled
+    if (currentCount === 1) {
+        icon.className = 'fa-solid fa-comment';
+    }
+}
+
+function hideEmptyMessage(postID) {
+    const modalBody = document.querySelector(`#comments-modal-${postID} .modal-body`);
+    const emptyMessage = modalBody.querySelector('.text-center');
+
+    if (emptyMessage && emptyMessage.textContent.includes("There's nothing")) {
+        emptyMessage.style.display = 'none';
+    }
 }
 
 // Message box

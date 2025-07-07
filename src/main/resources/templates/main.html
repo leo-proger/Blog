@@ -21,14 +21,14 @@
     <main>
         <div class="wall container-md">
             <!-- A post -->
-            <div th:each="post : ${posts}" th:id="'post_id_' + ${post.id}"
+            <div th:each="post : ${posts}" th:id="'post_id_' + ${post.getId()}"
                  class="row border border-2 rounded-4 mx-auto my-3">
                 <div class="col">
                     <div class="row d-flex">
                         <div class="col d-flex align-items-center"
                              th:classappend="${#authorization.expression('hasRole(''ADMIN'')')} ? 'justify-content-start' : 'justify-content-center'">
                             <span class="text-center"
-                                  th:text="${#temporals.format(post.createdAt, 'd MMM yyyy, HH:mm')}"></span>
+                                  th:text="${#temporals.format(post.getCreatedAt(), 'd MMM yyyy, HH:mm')}"></span>
                         </div>
                         <div class="col d-flex justify-content-end" sec:authorize="hasRole('ADMIN')">
                             <button type="button" class="delete_post_btn" data-bs-toggle="modal"
@@ -77,7 +77,7 @@
 
                         <div class="border-top border-2">
                             <button type="button" class="like-btn btn btn-lg m-1 p-0 border-0"
-                                    th:data-post-id="${post.id}">
+                                    th:data-post-id="${post.getId()}">
                                 <i th:class="${post.getUsersLiked().contains(#authentication.getPrincipal()) ? 'like-icon fa-solid fa-heart' : 'like-icon fa-regular fa-heart'}"></i>
                                 <span class="likes-count" th:text="${post.getLikesCount()}"></span>
                             </button>
@@ -103,7 +103,7 @@
                                             <div th:if="${post.getCommentsCount() == 0}" class="text-center">
                                                 <span>There's nothing</span>
                                             </div>
-                                            <div th:each="comment : ${post.getComments()}" class="row">
+                                            <div th:each="comment : ${post.getCommentsByCreatedAtDesc()}" class="row">
                                                 <div class="col-12">
                                                     <div class="comment-info row">
                                                         <div class="comment-author-name col">
@@ -125,7 +125,8 @@
                                         </div>
                                         <div class="modal-footer">
                                             <form th:action="@{'/posts/comments/create/' + ${post.getId()}}"
-                                                  method="POST" class="send-comment-form w-100">
+                                                  method="POST" class="send-comment-form w-100"
+                                                  th:data-post-id="${post.getId()}">
                                                 <div class="d-flex align-items-end">
                                                     <label for="comment-text"></label>
                                                     <textarea class="form-control me-2"
@@ -136,8 +137,7 @@
                                                               rows="1"
                                                               style="resize: none; overflow-y: auto; max-height: 150px;"
                                                     ></textarea>
-                                                    <button type="submit" class="btn btn-primary"
-                                                            th:data-post-id="${post.getId()}">
+                                                    <button type="submit" class="btn btn-primary">
                                                         <i class="fa-solid fa-paper-plane-top"></i>
                                                     </button>
                                                 </div>

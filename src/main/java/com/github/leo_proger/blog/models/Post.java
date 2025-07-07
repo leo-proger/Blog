@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Entity
@@ -48,6 +45,10 @@ public class Post {
 
     public Integer getCommentsCount() {
         return comments.size();
+    }
+
+    public List<Comment> getCommentsByCreatedAtDesc() {
+        return comments.stream().sorted((o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt())).toList();
     }
 
     public void setImageUrl(String img) {

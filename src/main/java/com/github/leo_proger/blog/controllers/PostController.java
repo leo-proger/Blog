@@ -1,5 +1,6 @@
 package com.github.leo_proger.blog.controllers;
 
+import com.github.leo_proger.blog.dto.CommentDTO;
 import com.github.leo_proger.blog.dto.PostDTO;
 import com.github.leo_proger.blog.models.Post;
 import com.github.leo_proger.blog.models.User;
@@ -102,16 +103,16 @@ public class PostController {
 
     @ResponseBody
     @PostMapping("/like/{postID}")
-    public ResponseEntity<Map<String, String>> likePost(@PathVariable Long postID, @AuthenticationPrincipal User user) {
+    public ResponseEntity<?> likePost(@PathVariable Long postID, @AuthenticationPrincipal User user) {
         String action = postService.likePost(postID, user.getId());
         return new ResponseEntity<>(Map.of("Action", action), HttpStatus.OK);
     }
 
     @ResponseBody
     @PostMapping("/comments/create/{postID}")
-    public ResponseEntity<HttpStatus> createComment(@RequestParam("text") String text, @PathVariable Long postID, Principal principal) {
+    public ResponseEntity<?> createComment(@RequestParam("text") String text, @PathVariable Long postID, Principal principal) {
         System.out.println(text);
-        commentService.createComment(principal.getName(), postID, text);
-        return new ResponseEntity<>(HttpStatus.OK);
+        CommentDTO commentDTO = commentService.createComment(principal.getName(), postID, text);
+        return new ResponseEntity<>(Map.of("Comment", commentDTO), HttpStatus.OK);
     }
 }
