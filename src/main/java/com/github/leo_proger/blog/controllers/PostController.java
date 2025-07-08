@@ -1,10 +1,8 @@
 package com.github.leo_proger.blog.controllers;
 
-import com.github.leo_proger.blog.dto.CommentDTO;
 import com.github.leo_proger.blog.dto.PostDTO;
 import com.github.leo_proger.blog.models.Post;
 import com.github.leo_proger.blog.models.User;
-import com.github.leo_proger.blog.services.CommentService;
 import com.github.leo_proger.blog.services.PostService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -19,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.security.Principal;
 import java.util.Map;
 
 
@@ -27,11 +24,9 @@ import java.util.Map;
 @RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
-    private final CommentService commentService;
 
-    public PostController(PostService postService, CommentService commentService) {
+    public PostController(PostService postService) {
         this.postService = postService;
-        this.commentService = commentService;
     }
 
     @GetMapping("/create")
@@ -106,13 +101,5 @@ public class PostController {
     public ResponseEntity<?> likePost(@PathVariable Long postID, @AuthenticationPrincipal User user) {
         String action = postService.likePost(postID, user.getId());
         return new ResponseEntity<>(Map.of("Action", action), HttpStatus.OK);
-    }
-
-    @ResponseBody
-    @PostMapping("/comments/create/{postID}")
-    public ResponseEntity<?> createComment(@RequestParam("text") String text, @PathVariable Long postID, Principal principal) {
-        System.out.println(text);
-        CommentDTO commentDTO = commentService.createComment(principal.getName(), postID, text);
-        return new ResponseEntity<>(Map.of("Comment", commentDTO), HttpStatus.OK);
     }
 }
