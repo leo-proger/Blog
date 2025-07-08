@@ -6,9 +6,6 @@ import com.github.leo_proger.blog.model.User;
 import com.github.leo_proger.blog.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,9 +32,6 @@ public class UserController {
 
     @PostMapping("/signup")
     public String signupPost(@ModelAttribute("user") @Valid UserDTO userDTO, BindingResult bindingResult, Model model, HttpServletRequest request) {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
-
         if (bindingResult.hasErrors()) {
             model.addAttribute("user", userDTO);
             return "signup";
@@ -45,7 +39,7 @@ public class UserController {
 
         try {
             User user = userService.save(userDTO);
-            userService.authenticateUser(user);
+            userService.authenticateUser(user, request);
         } catch (UserAlreadyExistsException e) {
             bindingResult.rejectValue("username", "error.username", e.getMessage());
             model.addAttribute("user", userDTO);
