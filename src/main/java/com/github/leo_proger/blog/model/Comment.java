@@ -16,11 +16,11 @@ public class Comment {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
+    @JoinColumn(name = "author_id", nullable = false, unique = true)
     private User author;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_id", nullable = false, unique = true)
     private Post post;
 
     @Column(nullable = false)
