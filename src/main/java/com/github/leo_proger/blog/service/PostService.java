@@ -42,7 +42,7 @@ public class PostService {
         Post post = postRepository.findById(postID)
                 .orElseThrow(() -> new IllegalArgumentException("Post with id " + postID + " does not exist"));
         User user = userRepository.findById(detachedUserID)
-                .orElseThrow(() -> new IllegalArgumentException("User with id " + postID + " does not exist"));
+                .orElseThrow(() -> new IllegalArgumentException("User with id " + detachedUserID + " does not exist"));
 
         Set<User> usersLiked = post.getUsersLiked();
 
