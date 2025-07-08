@@ -4,6 +4,6 @@ html, body {
     padding: 0;
 }
 
-.signup_form {
+#signup-form {
     max-width: 400px;
 }

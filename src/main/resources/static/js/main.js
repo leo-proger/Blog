@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let postIdToDelete = null;
 
     // Capture the post ID when the delete button is clicked
-    const deleteButtons = document.querySelectorAll('.delete_post_btn');
+    const deleteButtons = document.querySelectorAll('.delete-post-btn');
     deleteButtons.forEach(button => {
         button.addEventListener('click', function () {
             postIdToDelete = this.getAttribute('data-post-id');
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Add event listener to the final delete button in the modal
-    const deletePostFinalBtn = document.getElementById('delete_post_final_btn');
+    const deletePostFinalBtn = document.getElementById('delete-post-final-btn');
     if (deletePostFinalBtn) {
         deletePostFinalBtn.addEventListener('click', function () {
                 if (postIdToDelete) {
@@ -32,12 +32,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         .then(response => {
                                 if (response.ok) {
                                     // Remove the post from the DOM
-                                    const postElement = document.getElementById('post_id_' + postIdToDelete);
+                                    const postElement = document.getElementById('post-id-' + postIdToDelete);
                                     if (postElement) {
                                         postElement.remove();
 
                                         // Check if there are any posts left
-                                        const remainingPosts = document.querySelectorAll('[id^="post_id_"]');
+                                        const remainingPosts = document.querySelectorAll('[id^="post-id-"]');
                                         if (remainingPosts.length === 0) {
                                             // No posts left, show the empty message
                                             const wallContainer = document.querySelector('.wall.container-md');

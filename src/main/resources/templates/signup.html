@@ -15,25 +15,26 @@
         <div class="row w-100">
             <div class="col">
                 <h1 class="mb-4">Sign Up</h1>
-                <form th:action="@{/users/signup}" method="post" th:object="${user}" class="signup_form mx-auto mb-2">
+                <form th:action="@{/users/signup}" method="post" th:object="${user}" id="signup-form"
+                      class="mx-auto mb-2">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control"
                                th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''"
-                               id="username_input" placeholder="Username" th:field="*{username}">
-                        <label for="username_input">Username</label>
+                               id="username-input" placeholder="Username" th:field="*{username}">
+                        <label for="username-input">Username</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" class="form-control"
                                th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
-                               id="password_input" placeholder="Password" th:field="*{password}">
-                        <label for="password_input">Password</label>
+                               id="password-input" placeholder="Password" th:field="*{password}">
+                        <label for="password-input">Password</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" class="form-control"
                                th:classappend="${#fields.hasErrors('passwordConfirmation')} ? 'is-invalid' : ''"
-                               id="password_confirmation_input" placeholder="Password"
+                               id="password-confirmation-input" placeholder="Password"
                                th:field="*{passwordConfirmation}">
-                        <label for="password_confirmation_input">Confirm password</label>
+                        <label for="password-confirmation-input">Confirm password</label>
                     </div>
 
                     <div>
