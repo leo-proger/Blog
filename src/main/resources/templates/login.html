@@ -15,16 +15,16 @@
         <div class="row w-100">
             <div class="col">
                 <h1 class="mb-4">Log In</h1>
-                <form th:action="@{/users/login}" method="post" class="login_form mx-auto mb-2">
+                <form th:action="@{/users/login}" method="post" class="login-form mx-auto mb-2">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" th:classappend="${param.error} ? 'is-invalid' : ''"
-                               id="username_input" placeholder="Username" name="username">
-                        <label for="username_input">Username</label>
+                               id="username-input" placeholder="Username" name="username">
+                        <label for="username-input">Username</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" class="form-control" th:classappend="${param.error} ? 'is-invalid' : ''"
-                               id="password_input" placeholder="Password" name="password">
-                        <label for="password_input">Password</label>
+                               id="password-input" placeholder="Password" name="password">
+                        <label for="password-input">Password</label>
                     </div>
                     <div th:if="${param.error}">Invalid username or password</div>
                     <button type="submit" class="btn btn-primary w-50 mb-1 mt-2">Submit</button>
