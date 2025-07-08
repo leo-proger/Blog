@@ -1,6 +1,6 @@
 package com.github.leo_proger.blog.controllers;
 
-import com.github.leo_proger.blog.dto.PostDTO;
+import com.github.leo_proger.blog.dtos.PostDTO;
 import com.github.leo_proger.blog.models.Post;
 import com.github.leo_proger.blog.models.User;
 import com.github.leo_proger.blog.services.PostService;

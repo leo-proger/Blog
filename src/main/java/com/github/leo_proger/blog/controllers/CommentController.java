@@ -1,6 +1,6 @@
 package com.github.leo_proger.blog.controllers;
 
-import com.github.leo_proger.blog.dto.CommentDTO;
+import com.github.leo_proger.blog.dtos.CommentDTO;
 import com.github.leo_proger.blog.services.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

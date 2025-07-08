@@ -1,6 +1,6 @@
 package com.github.leo_proger.blog.services;
 
-import com.github.leo_proger.blog.dto.CommentDTO;
+import com.github.leo_proger.blog.dtos.CommentDTO;
 import com.github.leo_proger.blog.exceptions.PostNotFoundException;
 import com.github.leo_proger.blog.exceptions.UserNotFoundException;
 import com.github.leo_proger.blog.models.Comment;

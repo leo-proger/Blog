@@ -1,4 +1,4 @@
-package com.github.leo_proger.blog.dto;
+package com.github.leo_proger.blog.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

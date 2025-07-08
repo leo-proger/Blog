@@ -1,6 +1,6 @@
 package com.github.leo_proger.blog.services;
 
-import com.github.leo_proger.blog.dto.UserDTO;
+import com.github.leo_proger.blog.dtos.UserDTO;
 import com.github.leo_proger.blog.enums.UserRole;
 import com.github.leo_proger.blog.exceptions.UserAlreadyExistsException;
 import com.github.leo_proger.blog.models.User;

@@ -1,7 +1,7 @@
 package com.github.leo_proger.blog.validators;
 
 import com.github.leo_proger.blog.annotations.PasswordMatches;
-import com.github.leo_proger.blog.dto.UserDTO;
+import com.github.leo_proger.blog.dtos.UserDTO;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

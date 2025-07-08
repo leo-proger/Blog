@@ -1,4 +1,4 @@
-package com.github.leo_proger.blog.dto;
+package com.github.leo_proger.blog.dtos;
 
 import com.github.leo_proger.blog.annotations.PasswordMatches;
 import com.github.leo_proger.blog.annotations.ValidUsername;
