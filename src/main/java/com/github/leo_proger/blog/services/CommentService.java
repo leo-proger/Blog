@@ -3,6 +3,7 @@ package com.github.leo_proger.blog.services;
 import com.github.leo_proger.blog.dtos.CommentDTO;
 import com.github.leo_proger.blog.exceptions.PostNotFoundException;
 import com.github.leo_proger.blog.exceptions.UserNotFoundException;
+import com.github.leo_proger.blog.mappers.CommentMapper;
 import com.github.leo_proger.blog.models.Comment;
 import com.github.leo_proger.blog.models.Post;
 import com.github.leo_proger.blog.models.User;
@@ -18,11 +19,13 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final CommentMapper commentMapper;
 
-    public CommentService(CommentRepository commentRepository, UserRepository userRepository, PostRepository postRepository) {
+    public CommentService(CommentRepository commentRepository, UserRepository userRepository, PostRepository postRepository, CommentMapper commentMapper) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.postRepository = postRepository;
+        this.commentMapper = commentMapper;
     }
 
 
@@ -44,6 +47,6 @@ public class CommentService {
         }
 
         comment.setText(text);
-        return CommentDTO.toDTO(commentRepository.save(comment));
+        return commentMapper.toDTO(commentRepository.save(comment));
     }
 }
