@@ -2,8 +2,7 @@ package com.github.leo_proger.blog.dto;
 
 import com.github.leo_proger.blog.annotation.PasswordMatches;
 import com.github.leo_proger.blog.annotation.ValidUsername;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +18,6 @@ public class UserDTO {
     @Size(min = 5, message = "Password length must be 5 or more")
     private String password;
 
-    @NotEmpty(message = "Password confirmation cannot be empty")
+    @NotBlank(message = "Password confirmation cannot be empty")
     private String passwordConfirmation;
 }
