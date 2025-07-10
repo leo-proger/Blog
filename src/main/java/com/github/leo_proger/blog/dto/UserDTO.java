@@ -19,7 +19,6 @@ public class UserDTO {
     @Size(min = 5, message = "Password length must be 5 or more")
     private String password;
 
-    @NotNull(message = "Password confirmation cannot be empty")
     @NotEmpty(message = "Password confirmation cannot be empty")
     private String passwordConfirmation;
 }
