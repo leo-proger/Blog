@@ -67,7 +67,7 @@ public class AppConfig {
                 Comment comment = new Comment();
                 comment.setAuthor(author.get());
                 comment.setPost(post.get());
-                comment.setText("abobadsfasdfas");
+                comment.setText("This is a test comment");
 
                 commentRepository.save(comment);
                 System.out.println("Test comment created");
