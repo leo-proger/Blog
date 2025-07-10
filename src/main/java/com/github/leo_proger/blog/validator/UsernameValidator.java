@@ -5,7 +5,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class UsernameValidator implements ConstraintValidator<ValidUsername, String> {
-    private static final String PATTERN = "^[a-zA-Zа-яА-ЯЁё._\\-0-9]+$";
+    private static final String PATTERN = "^[a-zA-Zа-яА-ЯЁё._\\-0-9]{4,30}$";
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {

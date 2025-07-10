@@ -13,7 +13,7 @@ import lombok.Setter;
 @PasswordMatches
 public class UserDTO {
     @ValidUsername
-    @Size(min = 3, max = 30, message = "Username length must be from 3 to 30")
+    @Size(min = 4, max = 30, message = "Username length must be from 3 to 30")
     private String username;
 
     @Size(min = 5, message = "Password length must be 5 or more")
