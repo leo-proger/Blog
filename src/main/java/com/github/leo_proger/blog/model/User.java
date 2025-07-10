@@ -27,7 +27,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "post_like",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -36,7 +36,7 @@ public class User implements UserDetails {
     )
     private final Set<Post> likedPosts = new HashSet<>(); // Posts which is liked by a user
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", cascade = {CascadeType.ALL})
     private final Set<Comment> comments = new HashSet<>(); // Comments which user wrote
 
     public void addLikedPost(Post post) {

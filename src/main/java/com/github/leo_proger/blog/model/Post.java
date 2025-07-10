@@ -19,12 +19,13 @@ public class Post {
     @Lob
     private String image;
 
+    @Column(nullable = false)
     private final LocalDateTime createdAt;
 
     @ManyToMany(mappedBy = "likedPosts", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private final Set<User> usersLiked = new HashSet<>(); // Users who liked the post
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private final Set<Comment> comments = new HashSet<>(); // Comments on the post
 
     public Post() {
