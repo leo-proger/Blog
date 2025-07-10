@@ -116,7 +116,10 @@ for (let formElement of sendCommentForm) {
             body: new FormData(form)
         }).then(r => {
             if (!r.ok) {
-                throw new Error("Error creating the comment")
+                return r.json().then(errors => {
+                    const message = Object.values(errors)[0]
+                    alert(message)
+                });
             }
             return r.json();
         }).then(data => {
