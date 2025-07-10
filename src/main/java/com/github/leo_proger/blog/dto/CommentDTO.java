@@ -3,6 +3,7 @@ package com.github.leo_proger.blog.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -14,6 +15,7 @@ public class CommentDTO {
     private final String authorName;
 
     @NotNull(message = "Post ID can't be empty")
+    @Positive(message = "Post ID can't be negative or zero")
     private final Long postID;
 
     @NotEmpty(message = "Text can't be empty")
