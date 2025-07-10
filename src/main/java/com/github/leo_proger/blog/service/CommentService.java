@@ -10,11 +10,13 @@ import com.github.leo_proger.blog.model.User;
 import com.github.leo_proger.blog.repository.CommentRepository;
 import com.github.leo_proger.blog.repository.PostRepository;
 import com.github.leo_proger.blog.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@Transactional
 public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
