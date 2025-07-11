@@ -31,12 +31,12 @@ public class PostController {
 
     @GetMapping("/create")
     public String createGet(Model model) {
-        model.addAttribute("post", new PostDTO("", null, ""));
+        model.addAttribute("postDTO", new PostDTO());
         return "create_post";
     }
 
     @PostMapping("/create")
-    public String createPost(@Valid @ModelAttribute("post") PostDTO postDTO, BindingResult bindingResult) throws IOException {
+    public String createPost(@Valid @ModelAttribute("postDTO") PostDTO postDTO, BindingResult bindingResult) throws IOException {
         String postText = postDTO.getText();
         String postImageUrl = postDTO.getImageUrl();
         MultipartFile postImageFile = postDTO.getImageFile();

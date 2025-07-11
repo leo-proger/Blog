@@ -11,7 +11,7 @@
     <main>
         <div class="container">
             <div class="row row-cols-1">
-                <form action="#" th:action="@{/posts/create}" th:object="${post}" method="post"
+                <form th:action="@{/posts/create}" th:object="${postDTO}" method="post"
                       enctype="multipart/form-data" autocomplete="off">
                     <div class="col mb-3">
                         <label for="text" class="form-label">Text</label>

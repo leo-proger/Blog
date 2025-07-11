@@ -77,4 +77,14 @@ public class Post {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", image='" + image + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }
