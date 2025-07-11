@@ -13,7 +13,7 @@ public class MainController {
         this.postService = postService;
     }
 
-    @GetMapping({"/", "/posts"})
+    @GetMapping("/")
     public String index(Model model) {
         model.addAttribute(
                 "posts", postService.findAllByOrderByCreatedAtDesc()
