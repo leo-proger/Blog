@@ -1,41 +1,52 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <body>
-    <!-- TODO: Rewrite navbar -->
     <header th:fragment="header">
-        <nav class="navbar navbar-expand-sm bg-body-tertiary">
-            <div class="header__container container d-flex align-items-baseline justify-content-center">
-                <a class="navbar-brand" href="/">Welcome to Leo Proger's blog</a>
+        <nav class="navbar navbar-expand-md bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" th:href="@{/}">Welcome to Leo Proger's blog</a>
 
+                <!--Collapse button-->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbar_content" aria-controls="navbar_content"
+                        data-bs-target="#navbar-supported-content" aria-controls="navbar-supported-content"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbar_content">
-                    <ul class="navbar-nav">
+                <div class="collapse navbar-collapse" id="navbar-supported-content">
+                    <ul class="navbar-nav mb-2 mb-lg-0 me-auto">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                aria-expanded="false">
-                                Other socials
+                                Socials
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="https://t.me/leo_proger" target="_blank">Telegram</a>
-                                </li>
-                                <li><a class="dropdown-item" href="https://vk.com/leo_proger" target="_blank">VK</a>
-                                </li>
+                                <li><a class="dropdown-item" href="https://t.me/leo_proger">Telegram</a></li>
+                                <li><a class="dropdown-item" href="https://vk.com/leo_proger">VK</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="https://github.com/leo-proger"
-                                       target="_blank">GitHub</a></li>
+                                <li><a class="dropdown-item" href="https://github.com/leo-proger">GitHub</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                            <a class="nav-link" th:href="@{/posts/create}">Create a post</a>
-                        </li>
                     </ul>
+                    <div sec:authorize="isAuthenticated() && !hasRole('ADMIN')" class="d-flex align-items-center">
+                        <span class="navbar-text" th:text="'@' + ${#authentication.getName()}"></span>
+                        <span class="navbar-text ms-2 me-2">|</span>
+                        <a class="nav-link" th:href="@{/logout}">Log out</a>
+                    </div>
+                    <div sec:authorize="!isAuthenticated()" class="d-flex align-items-center">
+                        <a class="nav-link" th:href="@{/users/login}">Log In</a>
+                        <span class="navbar-text ms-2 me-2">|</span>
+                        <a class="nav-link" th:href="@{/users/signup}">Sign Up</a>
+                    </div>
+                    <div sec:authorize="isAuthenticated() && hasRole('ADMIN')" class="d-flex align-items-center">
+                        <span class="navbar-text" th:text="'@' + ${#authentication.getName()} + ' (admin)'"></span>
+                        <span class="navbar-text ms-2 me-2">|</span>
+                        <a class="nav-link" th:href="@{/posts/create}">Create a post</a>
+                        <span class="navbar-text ms-2 me-2">|</span>
+                        <a class="nav-link" th:href="@{/logout}">Log out</a>
+                    </div>
                 </div>
             </div>
         </nav>
