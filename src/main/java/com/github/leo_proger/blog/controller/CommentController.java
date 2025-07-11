@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-@Controller()
+@Controller
 @RequestMapping("/posts/comments")
 public class CommentController {
 

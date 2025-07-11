@@ -24,14 +24,13 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        String[] resources = {"/css/**", "/js/**"};
-
-        http.authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/bio").permitAll()
-                        .requestMatchers(resources).permitAll()
-                        .requestMatchers("/users/signup").permitAll()
+        http.
+                authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/posts/create").hasRole(UserRole.ADMIN.getRole())
-                        .anyRequest().authenticated()
+                        .requestMatchers("/posts/delete").hasRole(UserRole.ADMIN.getRole())
+                        .requestMatchers("/posts/like").hasRole(UserRole.USER.getRole())
+                        .requestMatchers("/posts/comments/create").hasRole(UserRole.USER.getRole())
+                        .anyRequest().permitAll()
                 )
                 .formLogin((form) -> form
                         .loginPage("/users/login")
@@ -44,7 +43,8 @@ public class WebSecurityConfig {
                         securityContext.securityContextRepository(new HttpSessionSecurityContextRepository())
                 )
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                );
 
         return http.build();
     }
