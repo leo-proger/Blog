@@ -76,13 +76,17 @@
                         </div>
 
                         <div class="border-top border-2">
-                            <button type="button" class="like-btn btn btn-lg m-1 p-0 border-0"
-                                    th:data-post-id="${post.getId()}">
+                            <!-- Like button -->
+                            <button class="like-btn btn btn-lg m-1 p-0 border-0" th:data-post-id="${post.getId()}"
+                                    th:disabled="${!#authorization.expr('isAuthenticated()')}"
+                                    type="button">
                                 <i th:class="${post.getUsersLiked().contains(#authentication.getPrincipal()) ? 'like-icon fa-solid fa-heart' : 'like-icon fa-regular fa-heart'}"></i>
                                 <span class="likes-count" th:text="${post.getLikesCount()}"></span>
                             </button>
-                            <button type="button" class="comments-btn btn btn-lg m-1 ms-3 p-0 border-0"
-                                    data-bs-toggle="modal" th:data-bs-target="'#comments-modal-' + ${post.getId()}">
+                            <!-- Comment button -->
+                            <button class="comments-btn btn btn-lg m-1 ms-3 p-0 border-0" data-bs-toggle="modal"
+                                    th:data-bs-target="'#comments-modal-' + ${post.getId()}"
+                                    th:disabled="${!#authorization.expr('isAuthenticated()')}" type="button">
                                 <i th:class="${post.getCommentsCount() == 0 ? 'fa-regular fa-comment' : 'fa-solid fa-comment'}"></i>
                                 <span class="comments-count" th:text="${post.getCommentsCount()}"></span>
                             </button>
