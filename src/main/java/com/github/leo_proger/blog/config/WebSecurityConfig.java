@@ -24,12 +24,12 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // More specific URLs should be upper than general ones
         http.
                 authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/posts/create").hasRole(UserRole.ADMIN.getRole())
                         .requestMatchers("/posts/delete").hasRole(UserRole.ADMIN.getRole())
-                        .requestMatchers("/posts/like").hasRole(UserRole.USER.getRole())
-                        .requestMatchers("/posts/comments/create").hasRole(UserRole.USER.getRole())
+                        .requestMatchers("/posts/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .formLogin((form) -> form

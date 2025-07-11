@@ -1,7 +1,6 @@
 package com.github.leo_proger.blog.controller;
 
 import com.github.leo_proger.blog.dto.PostDTO;
-import com.github.leo_proger.blog.exception.UserNotFoundException;
 import com.github.leo_proger.blog.model.Post;
 import com.github.leo_proger.blog.model.User;
 import com.github.leo_proger.blog.service.PostService;
@@ -101,9 +100,9 @@ public class PostController {
     @PostMapping("/like/{postID}")
     public ResponseEntity<?> likePost(@PathVariable Long postID, @AuthenticationPrincipal User user) {
         if (user == null) {
-            throw new UserNotFoundException("User not found");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         String action = postService.likePost(postID, user.getId());
-        return new ResponseEntity<>(Map.of("Action", action), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("Action", action));
     }
 }
