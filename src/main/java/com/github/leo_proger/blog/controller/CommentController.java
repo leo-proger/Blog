@@ -5,6 +5,7 @@ import com.github.leo_proger.blog.service.CommentService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,10 @@ public class CommentController {
     @ResponseBody
     @PostMapping("/create/{postID}")
     public ResponseEntity<?> createComment(@RequestParam("text") String text, @PathVariable Long postID, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         CommentDTO commentDTO = new CommentDTO(principal.getName(), postID, text);
 
         Set<ConstraintViolation<CommentDTO>> violations = validator.validate(commentDTO);
@@ -40,10 +45,10 @@ public class CommentController {
                 String message = violation.getMessage();
                 errors.put(field, message);
             }
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
         }
 
         CommentDTO processedCommentDTO = commentService.createComment(principal.getName(), postID, text);
-        return new ResponseEntity<>(Map.of("Comment", processedCommentDTO), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("Comment", processedCommentDTO));
     }
 }
