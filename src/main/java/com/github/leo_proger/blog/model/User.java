@@ -27,25 +27,12 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable(
-            name = "post_like",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id"),
-            uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "post_id"})
-    )
-    private final Set<Post> likedPosts = new HashSet<>(); // Posts which is liked by a user
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final Set<PostLike> likes = new HashSet<>();
 
     @OneToMany(mappedBy = "author", cascade = {CascadeType.ALL})
     private final Set<Comment> comments = new HashSet<>(); // Comments which user wrote
 
-    public void addLikedPost(Post post) {
-        likedPosts.add(post);
-    }
-
-    public void removeLikedPost(Post post) {
-        likedPosts.remove(post);
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

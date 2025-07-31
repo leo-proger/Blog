@@ -80,8 +80,8 @@
                             <button class="like-btn btn btn-lg m-1 p-0 border-0" th:data-post-id="${post.getId()}"
                                     th:disabled="${!#authorization.expr('isAuthenticated()')}"
                                     type="button">
-                                <i th:class="${post.getUsersLiked().contains(#authentication.getPrincipal()) ? 'like-icon fa-solid fa-heart' : 'like-icon fa-regular fa-heart'}"></i>
-                                <span class="likes-count" th:text="${post.getLikesCount()}"></span>
+                                <i th:class="${likedPostsIDs != null and likedPostsIDs.contains(post.id) ? 'like-icon fa-solid fa-heart' : 'like-icon fa-regular fa-heart'}"></i>
+                                <span class="likes-count" th:text="${post.getLikes().size()}"></span>
                             </button>
                             <!-- Comment button -->
                             <button class="comments-btn btn btn-lg m-1 ms-3 p-0 border-0" data-bs-toggle="modal"
