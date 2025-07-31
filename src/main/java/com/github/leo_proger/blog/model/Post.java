@@ -23,7 +23,7 @@ public class Post {
 	private String image;
 
 	@Column(nullable = false)
-	private final LocalDateTime createdAt;
+	private LocalDateTime createdAt;
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 	private final Set<PostLike> likes = new HashSet<>();
