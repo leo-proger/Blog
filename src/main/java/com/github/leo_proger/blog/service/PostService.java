@@ -1,6 +1,8 @@
 package com.github.leo_proger.blog.service;
 
 
+import com.github.leo_proger.blog.exception.PostNotFoundException;
+import com.github.leo_proger.blog.exception.UserNotFoundException;
 import com.github.leo_proger.blog.model.Post;
 import com.github.leo_proger.blog.model.PostLike;
 import com.github.leo_proger.blog.model.User;
@@ -41,7 +43,7 @@ public class PostService {
 	}
 
 	public void deleteById(Long id) {
-		if (!postRepository.existsById(id)) throw new IllegalArgumentException(
+		if (!postRepository.existsById(id)) throw new PostNotFoundException(
 				"Post with id " + id + " does not exist");
 
 		postRepository.deleteById(id);
@@ -49,9 +51,9 @@ public class PostService {
 
 	public String likePost(Long postID, Long detachedUserID) {
 		// Since it's a transaction, new session has started and Hibernate isn't capturing changes for user from controller
-		Post post = postRepository.findById(postID).orElseThrow(() -> new IllegalArgumentException(
+		Post post = postRepository.findById(postID).orElseThrow(() -> new PostNotFoundException(
 				"Post with id " + postID + " does not exist"));
-		User user = userRepository.findById(detachedUserID).orElseThrow(() -> new IllegalArgumentException(
+		User user = userRepository.findById(detachedUserID).orElseThrow(() -> new UserNotFoundException(
 				"User with id " + detachedUserID + " does not exist"));
 
 		Optional<PostLike> postLikeOptional = postLikeRepository.findPostLikeByUserAndPost(user, post);
