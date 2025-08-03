@@ -2,6 +2,7 @@ package com.github.leo_proger.blog.service;
 
 
 import com.github.leo_proger.blog.exception.PostNotFoundException;
+import com.github.leo_proger.blog.exception.UserNotFoundException;
 import com.github.leo_proger.blog.model.Post;
 import com.github.leo_proger.blog.model.PostLike;
 import com.github.leo_proger.blog.model.User;
@@ -141,6 +142,22 @@ public class PostServiceTest {
 		assertEquals(post, deletedPostLike.getPost());
 
 		verify(postLikeRepositoryMock, never()).save(any(PostLike.class));
+	}
+
+	@Test
+	void likePost_PostNotFound() {
+		when(postRepositoryMock.findById(anyLong())).thenReturn(Optional.empty());
+		when(userRepositoryMock.findById(anyLong())).thenReturn(Optional.of(new User()));
+
+		assertThrows(PostNotFoundException.class, () -> postService.likePost(1L, 1L));
+	}
+
+	@Test
+	void likePost_UserNotFound() {
+		when(postRepositoryMock.findById(anyLong())).thenReturn(Optional.of(new Post()));
+		when(userRepositoryMock.findById(anyLong())).thenReturn(Optional.empty());
+
+		assertThrows(UserNotFoundException.class, () -> postService.likePost(1L, 1L));
 	}
 
 }
