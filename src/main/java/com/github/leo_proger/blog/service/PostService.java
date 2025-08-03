@@ -43,8 +43,7 @@ public class PostService {
 	}
 
 	public void deleteById(Long id) {
-		if (!postRepository.existsById(id)) throw new PostNotFoundException(
-				"Post with id " + id + " does not exist");
+		if (!postRepository.existsById(id)) throw new PostNotFoundException("Post with id " + id + " does not exist");
 
 		postRepository.deleteById(id);
 	}
