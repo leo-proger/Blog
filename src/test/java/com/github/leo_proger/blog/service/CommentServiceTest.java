@@ -88,7 +88,7 @@ class CommentServiceTest {
 
 	@Test
 	void createComment_UserNotFound() {
-		when(userRepository.findByUsername(anyString())).thenThrow(UserNotFoundException.class);
+		when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
 
 		assertThrows(UserNotFoundException.class, () -> commentService.createComment(authorName, postID, commentText));
 
@@ -101,7 +101,7 @@ class CommentServiceTest {
 		User user = new User();
 
 		when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
-		when(postRepository.findById(anyLong())).thenThrow(PostNotFoundException.class);
+		when(postRepository.findById(anyLong())).thenReturn(Optional.empty());
 
 		assertThrows(PostNotFoundException.class, () -> commentService.createComment(authorName, postID, commentText));
 
