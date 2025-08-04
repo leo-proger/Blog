@@ -6,7 +6,6 @@ import com.github.leo_proger.blog.enums.UserRole;
 import com.github.leo_proger.blog.exception.UserAlreadyExistsException;
 import com.github.leo_proger.blog.model.User;
 import com.github.leo_proger.blog.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -14,16 +13,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -92,10 +93,29 @@ class UserServiceTest {
 		when(userRepositoryMock.findByUsername(anyString())).thenReturn(Optional.of(new User()));
 
 		assertThrows(UserAlreadyExistsException.class, () -> userService.save(userDTO));
+
+		verify(userRepositoryMock, never()).save(any(User.class));
 	}
 
 	@Test
-	void authenticate() {
+	void authenticateUser_Success() {
+		// Given
+		String username = "leo_proger";
+		String password = "12345";
+		List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(UserRole.USER.getAuthority()));
+
+		// When
+		userService.authenticate(username, password, authorities);
+
+		// Then
+		ArgumentCaptor<Authentication> authArgumentCaptor = ArgumentCaptor.forClass(Authentication.class);
+		verify(authenticationManager).authenticate(authArgumentCaptor.capture());
+
+		Authentication auth = authArgumentCaptor.getValue();
+
+		assertEquals(username, auth.getPrincipal());
+		assertEquals(password, auth.getCredentials());
+		assertEquals(authorities, auth.getAuthorities());
 	}
 
 }
