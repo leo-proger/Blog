@@ -9,9 +9,9 @@ import com.github.leo_proger.blog.model.User;
 import com.github.leo_proger.blog.repository.PostLikeRepository;
 import com.github.leo_proger.blog.repository.PostRepository;
 import com.github.leo_proger.blog.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,22 +29,23 @@ import static org.mockito.Mockito.*;
 @ActiveProfiles("test")
 public class PostServiceTest {
 
-	@Autowired private PostRepository postRepository;
+	@Autowired
+	private PostRepository postRepository;
 
-	@Autowired private PostService postServiceAutowired;
+	@Autowired
+	private PostService postServiceAutowired;
 
+	@InjectMocks
 	private PostService postService;
 
-	@Mock private PostRepository postRepositoryMock;
+	@Mock
+	private PostRepository postRepositoryMock;
 
-	@Mock private UserRepository userRepositoryMock;
+	@Mock
+	private UserRepository userRepositoryMock;
 
-	@Mock private PostLikeRepository postLikeRepositoryMock;
-
-	@BeforeEach
-	void setUp() {
-		postService = new PostService(postRepositoryMock, userRepositoryMock, postLikeRepositoryMock);
-	}
+	@Mock
+	private PostLikeRepository postLikeRepositoryMock;
 
 	@Test
 	void deleteById_Success() {
