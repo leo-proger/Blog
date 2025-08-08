@@ -1,5 +1,6 @@
 package com.github.leo_proger.blog.controller;
 
+
 import com.github.leo_proger.blog.dto.PostDTO;
 import com.github.leo_proger.blog.model.Post;
 import com.github.leo_proger.blog.model.User;
@@ -23,86 +24,102 @@ import java.util.Map;
 @Controller
 @RequestMapping("/posts")
 public class PostController {
-    private final PostService postService;
 
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
+	private final PostService postService;
 
-    @GetMapping("/create")
-    public String createGet(Model model) {
-        model.addAttribute("postDTO", new PostDTO());
-        return "create_post";
-    }
+	public PostController(PostService postService) {
+		this.postService = postService;
+	}
 
-    @PostMapping("/create")
-    public String createPost(@Valid @ModelAttribute("postDTO") PostDTO postDTO, BindingResult bindingResult) throws IOException {
-        String postText = postDTO.getText();
-        String postImageUrl = postDTO.getImageUrl();
-        MultipartFile postImageFile = postDTO.getImageFile();
+	@GetMapping("/create")
+	public String createGet(Model model) {
+		model.addAttribute("postDTO", new PostDTO());
+		return "create_post";
+	}
 
-        if ((postText == null || postText.isBlank())
-                && (postImageUrl == null || postImageUrl.isBlank())
-                && (postImageFile == null || postImageFile.isEmpty())) {
-            bindingResult.rejectValue("text", "error.text", "At least one param must be not null");
-        }
-        if (postImageFile != null && !postImageFile.isEmpty()
-                && postImageUrl != null && !postImageUrl.isBlank()) {
-            bindingResult.rejectValue("imageUrl", "error.image", "You can add only one image");
-        }
+	@PostMapping("/create")
+	public String createPost(@Valid @ModelAttribute("postDTO") PostDTO postDTO, BindingResult bindingResult) throws
+	                                                                                                         IOException {
+		String postText = postDTO.getText();
+		String postImageUrl = postDTO.getImageUrl();
+		MultipartFile postImageFile = postDTO.getImageFile();
 
-        Post post = new Post();
+		if ((postText == null || postText.isBlank())
+		    && (postImageUrl == null || postImageUrl.isBlank())
+		    && (postImageFile == null || postImageFile.isEmpty()))
+		{
+			bindingResult.rejectValue("text", "error.text", "At least one param must be not null");
+		}
+		if (postImageFile != null && !postImageFile.isEmpty()
+		    && postImageUrl != null && !postImageUrl.isBlank())
+		{
+			bindingResult.rejectValue("imageUrl", "error.image", "You can add only one image");
+		}
 
-        if (postText != null && !postText.isBlank()) {
-            post.setText(postText);
-        }
-        if (postImageUrl != null && !postImageUrl.isBlank()) {
-            try {
-                URL url = new URL(postImageUrl);
+		Post post = new Post();
 
-                URLConnection connection = url.openConnection();
-                connection.connect();
+		if (postText != null && !postText.isBlank())
+		{
+			post.setText(postText);
+		}
+		if (postImageUrl != null && !postImageUrl.isBlank())
+		{
+			try
+			{
+				URL url = new URL(postImageUrl);
 
-                String contentType = connection.getContentType();
+				URLConnection connection = url.openConnection();
+				connection.connect();
 
-                if (contentType != null && contentType.startsWith("image/")) {
-                    post.setImageUrl(postImageUrl);
-                } else {
-                    bindingResult.rejectValue("imageUrl", "error.image", "You can paste links only with images");
-                }
-            } catch (IOException e) {
-                bindingResult.rejectValue("imageUrl", "error.image", "Incorrect URL");
-            }
-        }
-        if (postImageFile != null && !postImageFile.isEmpty()) {
-            String filetype = postImageFile.getContentType();
-            if (filetype != null && filetype.startsWith("image/")) {
-                post.setImage(postImageFile.getBytes(), filetype);
-            } else {
-                bindingResult.rejectValue("imageFile", "error.image", "Incorrect filetype. You can upload only images");
-            }
-        }
-        if (bindingResult.hasErrors()) {
-            return "create_post";
-        }
+				String contentType = connection.getContentType();
 
-        postService.save(post);
-        return "redirect:/";
-    }
+				if (contentType != null && contentType.startsWith("image/"))
+				{
+					post.setImageUrl(postImageUrl);
+				} else
+				{
+					bindingResult.rejectValue("imageUrl", "error.image", "You can paste links only with images");
+				}
+			} catch (IOException e)
+			{
+				bindingResult.rejectValue("imageUrl", "error.image", "Incorrect URL");
+			}
+		}
+		if (postImageFile != null && !postImageFile.isEmpty())
+		{
+			String filetype = postImageFile.getContentType();
+			if (filetype != null && filetype.startsWith("image/"))
+			{
+				post.setImage(postImageFile.getBytes(), filetype);
+			} else
+			{
+				bindingResult.rejectValue("imageFile", "error.image", "Incorrect filetype. You can upload only images");
+			}
+		}
+		if (bindingResult.hasErrors())
+		{
+			return "create_post";
+		}
 
-    @PostMapping("/delete/{id}")
-    public String deletePost(@PathVariable Long id) {
-        postService.deleteById(id);
-        return "redirect:/";
-    }
+		postService.save(post);
+		return "redirect:/";
+	}
 
-    @ResponseBody
-    @PostMapping("/like/{postID}")
-    public ResponseEntity<?> likePost(@PathVariable Long postID, @AuthenticationPrincipal User user) {
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        String action = postService.likePost(postID, user.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("Action", action));
-    }
+	@PostMapping("/delete/{id}")
+	public String deletePost(@PathVariable Long id) {
+		postService.deleteById(id);
+		return "redirect:/";
+	}
+
+	@ResponseBody
+	@PostMapping("/like/{postID}")
+	public ResponseEntity<?> likePost(@PathVariable Long postID, @AuthenticationPrincipal User user) {
+		if (user == null)
+		{
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+		String action = postService.likePost(postID, user.getId());
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of("Action", action));
+	}
+
 }
