@@ -1,5 +1,6 @@
 package com.github.leo_proger.blog.controller;
 
+
 import com.github.leo_proger.blog.dto.UserDTO;
 import com.github.leo_proger.blog.exception.UserAlreadyExistsException;
 import com.github.leo_proger.blog.model.User;
@@ -20,43 +21,56 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+	private final UserService userService;
 
-    @GetMapping("/signup")
-    public String signupGet(Model model) {
-        UserDTO userDTO = new UserDTO();
-        model.addAttribute("user", userDTO);
-        return "signup";
-    }
+	public UserController(UserService userService) {
+		this.userService = userService;
+	}
 
-    @PostMapping("/signup")
-    public String signupPost(@ModelAttribute("user") @Valid UserDTO userDTO, BindingResult bindingResult, Model model, HttpServletRequest request) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("user", userDTO);
-            return "signup";
-        }
+	@GetMapping("/signup")
+	public String signupGet(@ModelAttribute("user") UserDTO userDTO) {
+		return "signup";
+	}
 
-        try {
-            User user = userService.save(userDTO);
-            Authentication result = userService.authenticate(user.getUsername(), userDTO.getPassword(), user.getAuthorities());
+	@PostMapping("/signup")
+	public String signupPost(
+			@ModelAttribute("user") @Valid UserDTO userDTO,
+			BindingResult bindingResult,
+			Model model,
+			HttpServletRequest request
+	) {
+		if (bindingResult.hasErrors())
+		{
+			model.addAttribute("user", userDTO);
+			return "signup";
+		}
 
-            SecurityContext securityContext = SecurityContextHolder.getContext();
-            securityContext.setAuthentication(result);
+		try
+		{
+			User user = userService.save(userDTO);
+			Authentication result = userService.authenticate(
+					user.getUsername(),
+					userDTO.getPassword(),
+					user.getAuthorities()
+			);
 
-            HttpSession session = request.getSession(true);
-            session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, securityContext);
-        } catch (UserAlreadyExistsException e) {
-            bindingResult.rejectValue("username", "error.username", e.getMessage());
-            model.addAttribute("user", userDTO);
-            return "signup";
-        }
-        return "redirect:/";
-    }
+			SecurityContext securityContext = SecurityContextHolder.getContext();
+			securityContext.setAuthentication(result);
+
+			HttpSession session = request.getSession(true);
+			session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, securityContext);
+		} catch (UserAlreadyExistsException e)
+		{
+			bindingResult.rejectValue("username", "error.username", e.getMessage());
+			model.addAttribute("user", userDTO);
+			return "signup";
+		}
+		return "redirect:/";
+	}
+
 }
